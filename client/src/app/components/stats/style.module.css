@@ -1,0 +1,77 @@
+.statsSection {
+  background-color: #002c24;
+  color: #f5f5dc;
+  padding: 60px 20px;
+  text-align: center;
+
+  width: 100vw;
+
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  max-width: 1800px;
+}
+
+.heading {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.youtubeLogo {
+  width: 160px;
+  height: 160px;
+  position: relative;
+}
+.userLogo {
+  width: 130px;
+  height: 130px;
+  position: relative;
+}
+
+.statsGrid {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .statsGrid {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 400px;
+
+  justify-content: space-between;
+}
+
+.textContent {
+  margin-top: -25px;
+}
+
+.value {
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+}
+
+.label {
+  font-size: 2rem;
+  color: #e6e6e6;
+  margin-top: -10px;
+}

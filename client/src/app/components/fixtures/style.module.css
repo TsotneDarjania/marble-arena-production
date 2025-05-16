@@ -1,0 +1,39 @@
+.wrapper {
+  width: 100vw;
+  max-width: 1800px;
+
+  display: flex;
+  justify-content: center;
+}
+
+.fixtures {
+  width: 1200px;
+  display: flex;
+
+  flex-direction: column;
+  align-items: center;
+
+  padding: 30px;
+}
+
+.fixture {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  width: 100%;
+}
+
+.teamInitials {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+}
+.teamLogo {
+  width: 70px;
+  height: 70px;
+
+  position: relative;
+}

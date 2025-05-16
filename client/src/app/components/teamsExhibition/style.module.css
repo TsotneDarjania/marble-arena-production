@@ -1,0 +1,43 @@
+.wrapper {
+  width: 100%;
+  overflow: hidden;
+  padding: 40px 0;
+  text-align: center;
+
+  margin-top: 50px;
+}
+
+.wrapper h2 {
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.marquee {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: scroll-left 30s linear infinite; /* slower scroll helps seamlessness */
+}
+
+.logo {
+  position: relative;
+  width: 140px;
+  height: 80px;
+  margin: 0 40px;
+  flex-shrink: 0;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
