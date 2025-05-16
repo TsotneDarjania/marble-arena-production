@@ -1,0 +1,43 @@
+/* Title font */
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
+/* Text font */
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  width: 100vw;
+
+  background-color: rgb(16, 56, 47);
+  overflow-x: hidden;
+}
+
+.layout {
+  width: 100vw;
+
+  min-height: 100vh;
+
+  padding-top: 200px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.title-font {
+  font-family: "Audiowide", sans-serif;
+  letter-spacing: 2px;
+  font-style: normal;
+}
+.text-font {
+  font-family: "VT323", monospace;
+
+  font-style: normal;
+}

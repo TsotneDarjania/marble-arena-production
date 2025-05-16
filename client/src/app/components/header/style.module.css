@@ -1,0 +1,113 @@
+.header {
+  position: fixed;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  width: 100vw;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+
+  max-width: 1800px;
+  transition: 0.5s;
+
+  z-index: 2;
+}
+
+.scrolled {
+  background-color: rgb(16, 112, 88);
+}
+
+.header ul {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 50px;
+
+  padding: 12px;
+
+  padding-right: 40px;
+}
+
+.brandLogo {
+  width: 170px;
+  height: 170px;
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: 0.3s;
+}
+.scrolledBrandLogo {
+  width: 110px;
+  height: 110px;
+}
+.menuItem {
+  text-align: center;
+
+  color: rgb(153, 238, 172);
+  font-size: 2rem;
+  transition: 0.3s;
+
+  cursor: pointer;
+}
+
+.userName {
+  text-align: center;
+
+  color: rgb(99, 235, 8);
+  font-size: 2rem;
+  transition: 0.3s;
+
+  cursor: pointer;
+}
+
+.menuItem:hover {
+  color: aliceblue;
+}
+
+.scrolledMenuItem {
+  color: rgb(136, 218, 129);
+}
+
+.marbleCoinImage {
+  width: 60px;
+  height: 60px;
+
+  position: relative;
+}
+
+.userProfileImage {
+  width: 50px;
+  height: 50px;
+
+  position: relative;
+}
+
+.userIndicators {
+  display: flex;
+  align-items: center;
+
+  cursor: pointer;
+
+  justify-content: center;
+  padding: 3px 10px 3px 2px;
+  border-radius: 5px;
+  border: 4px solid rgb(54, 99, 80);
+
+  background-color: rgb(25, 121, 25);
+}
+
+.coinCount {
+  color: rgb(255, 154, 2);
+  font-size: 2.4rem;
+}

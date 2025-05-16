@@ -1,0 +1,186 @@
+.profilePage {
+  width: 100vw;
+
+  display: flex;
+  width: 100%;
+
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+
+  padding-bottom: 80px;
+}
+
+.userInitials {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 800px;
+}
+
+.title {
+  font-size: 4.5rem;
+
+  color: white;
+  width: 300px;
+}
+
+.avatar {
+  width: 240px;
+  height: 240px;
+
+  position: relative;
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+
+  font-size: 2rem;
+
+  cursor: pointer;
+}
+
+.logOutIcon {
+  width: 120px;
+  height: 120px;
+
+  position: relative;
+}
+
+.itemLogo {
+  width: 50px;
+  height: 50px;
+
+  position: relative;
+}
+
+.content {
+  width: 40%;
+
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+
+  align-items: center;
+
+  border-radius: 8px;
+  padding: 18px;
+
+  color: white;
+  font-size: 2.5rem;
+
+  border: 5px solid rgb(238, 180, 21);
+  border-style: dashed;
+}
+
+.itemTitle {
+  color: rgb(255, 238, 0);
+  font-size: 2.9rem;
+}
+
+.line {
+  width: 100%;
+  height: 1px;
+  margin-top: 20px;
+
+  border-top: 5px solid rgb(184, 157, 6);
+  border-style: dashed;
+}
+
+.userSettingsTitle {
+  color: rgb(255, 238, 0);
+  font-size: 2.9rem;
+}
+
+.betLogo {
+  width: 150px;
+  height: 150px;
+
+  position: relative;
+}
+
+.betHistoryHead {
+  display: flex;
+  color: white;
+
+  font-size: 2rem;
+  margin-top: 50px;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.betHistoryHead h2 {
+  font-size: 2.6rem;
+  margin-top: -40px;
+}
+
+.tickets {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.pagination {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+
+  color: white;
+  font-size: 2.5rem;
+
+  gap: 10px;
+
+  margin-top: 10px;
+}
+
+.pageButton {
+  cursor: pointer;
+
+  border: 2px solid white;
+  border-radius: 4px;
+
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.activePage {
+  background-color: aliceblue;
+  color: black;
+}
+
+.totalResults {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  padding-top: 30px;
+  padding-bottom: 40px;
+
+  font-size: 2rem;
+}
+
+.negative {
+  color: red;
+}
+
+.positive {
+  color: rgb(12, 253, 12);
+}
+
+.net {
+  color: rgb(255, 211, 14);
+}

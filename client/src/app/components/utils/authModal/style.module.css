@@ -1,0 +1,108 @@
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #012018;
+  padding: 40px 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  z-index: 1000;
+  color: #c0ffb3;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.title {
+  font-size: 1.6rem;
+  margin-bottom: 30px;
+  font-weight: bold;
+  text-align: center;
+  color: #aaff99;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form label {
+  font-size: 1.5rem;
+  color: #e1ffd6;
+}
+
+.form input {
+  padding: 10px;
+  border: none;
+  background-color: #001912;
+  color: #ffffff;
+  font-size: 2rem;
+  border-radius: 4px;
+
+  margin-top: -10px;
+}
+
+.loginBtn {
+  margin-top: 20px;
+  padding: 6px;
+  background-color: #f8b400;
+  color: #001912;
+  font-weight: bold;
+  font-size: 2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+
+  width: 100%;
+}
+
+.loginBtn:hover {
+  opacity: 0.9;
+}
+
+.registerBtn {
+  margin-top: 20px;
+  padding: 6px;
+  background-color: #2ece06;
+  color: #fdffff;
+  font-weight: bold;
+  font-size: 2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+
+  width: 100%;
+}
+
+.loginBtn:hover {
+  opacity: 0.9;
+}
+
+.forgot {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #aaff99;
+  cursor: pointer;
+}
+
+.footer {
+  margin-top: 24px;
+  font-size: 0.8rem;
+  text-align: center;
+  color: #88bb88;
+}
+
+.registerLink {
+  text-align: center;
+  font-size: 2rem;
+
+  border: 3px solid rgb(255, 248, 248);
+  padding: 6px;
+  border-radius: 4px;
+
+  cursor: pointer;
+}

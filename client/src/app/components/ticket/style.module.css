@@ -1,0 +1,86 @@
+.ticket {
+  width: 900px;
+  height: 225px;
+
+  background-color: rgb(8, 41, 35);
+  border: 3px solid rgb(12, 141, 117);
+  border-radius: 8px;
+
+  padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  position: relative;
+}
+
+.date {
+  font-size: 1.7rem;
+  color: rgb(20, 184, 94);
+}
+
+.teamInitialsRow {
+  display: flex;
+  gap: 50px;
+  align-items: center;
+
+  font-size: 2.5rem;
+  color: rgb(107, 253, 144);
+}
+
+.teamInitials {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.scoreResult {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.teamLogo {
+  width: 70px;
+  height: 70px;
+
+  position: relative;
+}
+
+.betOptions {
+  margin-top: 10px;
+  display: flex;
+
+  gap: 10px;
+}
+
+.betOptionItem {
+  border: 2px solid rgb(107, 253, 144);
+  padding: 0px 20px 0px 20px;
+
+  font-size: 2rem;
+  color: rgb(107, 253, 144);
+}
+
+.correctSeletcedBetOption {
+  background-color: green;
+}
+.wrongSeletcedBetOption {
+  background-color: rgb(231, 27, 0);
+}
+
+.correctResult {
+  position: absolute;
+  right: 20px;
+
+  color: rgb(51, 255, 129);
+}
+
+.wrongResult {
+  position: absolute;
+  right: 20px;
+
+  color: red;
+}

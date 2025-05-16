@@ -1,0 +1,51 @@
+.bettingSection {
+  padding: 60px 20px;
+  width: 100vw;
+  color: #f5f5dc;
+  text-align: center;
+
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  width: 100vw;
+  max-width: 1800px;
+}
+
+.heading {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 30px;
+}
+
+.checkpoints {
+  list-style: none;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0;
+  text-align: left;
+}
+
+.checkpoints li {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bullet {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-color: #f8b400;
+  border-radius: 50%;
+}
