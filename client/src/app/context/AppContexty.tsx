@@ -1,19 +1,15 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-
-type User = {
-  username: string;
-  coins: number;
-} | null;
+import { UserType } from "../types/userTypes";
 
 type AppContextType = {
   isShadowOpen: boolean;
   setIsShadowOpen: (value: boolean) => void;
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (value: boolean) => void;
-  user: User;
-  setUser: (u: User) => void;
+  user: UserType;
+  setUser: (u: UserType) => void;
   isLogin: boolean;
 };
 
@@ -24,13 +20,13 @@ export function AppProvider({
   user: initialUser,
 }: {
   children: ReactNode;
-  user: User;
+  user: UserType;
 }) {
   const [isShadowOpen, setIsShadowOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  const [user, setUser] = useState<User>(initialUser);
-  console.log(user);
+  const [user, setUser] = useState<UserType>(initialUser);
+
   return (
     <AppContext.Provider
       value={{
