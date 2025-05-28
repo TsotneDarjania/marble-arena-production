@@ -1,0 +1,92 @@
+.voteSection {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #f0d875;
+  margin-bottom: 30px;
+}
+
+.teamList {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.teamItem {
+  background-color: #0d4b43;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 0 10px #00000055;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+}
+
+.teamName {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #ffffff;
+  flex: 1;
+  text-align: left;
+  font-family: "Orbitron", sans-serif;
+}
+
+.voteControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.voteLabel {
+  color: #ffd666;
+  font-size: 1.4rem;
+}
+
+.voteInput {
+  width: 120px;
+  padding: 4px;
+  font-size: 2rem;
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid #888;
+  background-color: #fff;
+  color: #000;
+}
+
+.coin {
+  width: 54px;
+  height: 54px;
+}
+
+.voteButton {
+  background-color: #ffd666;
+  color: #042d2f;
+  border: none;
+  padding: 6px 14px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Orbitron", sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+.voteButton:hover {
+  background-color: #ffcc33;
+}
+
+.voteCount {
+  margin-top: 10px;
+  color: #bbb;
+  font-size: 14px;
+}

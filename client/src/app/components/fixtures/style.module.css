@@ -4,6 +4,10 @@
 
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  position: relative;
 }
 
 .fixtures {
@@ -13,27 +17,147 @@
   flex-direction: column;
   align-items: center;
 
-  padding: 30px;
+  gap: 20px;
+
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
 .fixture {
   display: flex;
-  flex-direction: column;
 
   align-items: center;
+  justify-content: center;
 
   width: 100%;
+
+  gap: 20px;
 }
 
 .teamInitials {
   display: flex;
   align-items: center;
 
-  width: 100%;
+  gap: 12px;
+
+  width: 40%;
 }
 .teamLogo {
   width: 70px;
   height: 70px;
 
   position: relative;
+}
+
+.teamName {
+  color: white;
+  font-size: 2rem;
+}
+.teamPosition {
+  font-size: 1.6rem;
+  color: rgb(133, 208, 211);
+  margin-top: -16px;
+}
+
+.result {
+  font-size: 2rem;
+  color: rgb(133, 208, 211);
+  text-align: center;
+  width: 10%;
+}
+
+.betButton {
+  width: 70px;
+  height: 45px;
+
+  font-size: 2rem;
+  color: white;
+
+  background-color: rgb(54, 209, 92);
+  border: none;
+
+  cursor: pointer;
+}
+
+.navigationButtons {
+  font-size: 2.5rem;
+  color: rgb(255, 121, 11);
+
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  max-width: 1200px;
+}
+
+.navigationButtons button {
+  cursor: pointer;
+}
+
+.weekLabel {
+  position: absolute;
+
+  text-align: center;
+  margin: auto;
+
+  left: 0;
+  right: 0;
+
+  width: fit-content;
+}
+
+.betWindow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.betOption {
+  color: white;
+  border: 2px solid white;
+
+  font-size: 2rem;
+
+  padding: 0px 12px 0px 12px;
+
+  cursor: pointer;
+}
+
+.submitBetBtn {
+  font-size: 2rem;
+
+  color: rgb(19, 34, 20);
+
+  background-color: rgb(252, 187, 67);
+
+  padding: 0px 12px 0px 12px;
+  border: 2px solid white;
+
+  cursor: pointer;
+}
+
+.betValue {
+  color: white;
+
+  border: 2px solid rgb(236, 240, 4);
+
+  width: 110px;
+  padding-left: 12px;
+
+  font-size: 2rem;
+
+  cursor: pointer;
+}
+
+.amount {
+  color: rgb(73, 250, 3);
+
+  width: 110px;
+  padding-left: 12px;
+
+  font-size: 2rem;
+}
+
+.selected {
+  background-color: rgb(6, 192, 62);
 }
