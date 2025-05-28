@@ -5,6 +5,8 @@ import styles from "./style.module.css";
 import Image from "next/image";
 import Ticket from "@/app/components/ticket/Ticket";
 import { useState } from "react";
+import { logout } from "@/app/utils/supabase/action";
+import Shadow from "@/app/components/utils/shadow/Shadow";
 
 type TicketData = {
   hostTeamName: string;
@@ -97,11 +99,22 @@ export default function ProfilePage() {
   const { user } = useAppContext();
   const [page, setPage] = useState(1);
 
+  const [clickedLogOut, setClickedLogOut] = useState(false);
+
   const totalPages = Math.ceil(MOCK_TICKETS.length / TICKETS_PER_PAGE);
   const paginatedTickets = MOCK_TICKETS.slice(
     (page - 1) * TICKETS_PER_PAGE,
     page * TICKETS_PER_PAGE
   );
+
+  async function handleLogOut() {
+    setClickedLogOut(true);
+    const result = await logout();
+
+    if (result.success) {
+      window.location.href = "/";
+    }
+  }
 
   return (
     <div className={styles.profilePage}>
@@ -128,7 +141,9 @@ export default function ProfilePage() {
             objectFit="contain"
           />
         </div>
-        <p className=" text-font">Log Out</p>
+        <p onClick={handleLogOut} className=" text-font">
+          Log Out
+        </p>
       </div>
 
       {/* Balance */}
@@ -229,6 +244,7 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
+      {clickedLogOut && <Shadow />}
     </div>
   );
 }
