@@ -1,4 +1,4 @@
-.addTeamWindow {
+.editTeamWindow {
   width: 60vw;
   height: 100vh;
 
@@ -20,7 +20,7 @@
   overflow-y: auto;
 }
 
-.addTeamWindow h2 {
+.editTeamWindow h2 {
   font-size: 3rem;
   color: white;
 }
