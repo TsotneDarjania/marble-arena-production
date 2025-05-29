@@ -5,7 +5,7 @@ import styles from "./style.module.css";
 import Image from "next/image";
 import Ticket from "@/app/components/ticket/Ticket";
 import { useState } from "react";
-import { logout } from "@/app/utils/supabase/action";
+import { logout } from "@/app/utils/supabase/actions/authActions";
 import Shadow from "@/app/components/utils/shadow/Shadow";
 
 type TicketData = {
@@ -122,7 +122,7 @@ export default function ProfilePage() {
       <div className={styles.userInitials}>
         <div className={styles.avatar}>
           <Image
-            src="/images/user-profile.png"
+            src={user!.profileImage}
             alt="User Avatar"
             fill
             objectFit="contain"

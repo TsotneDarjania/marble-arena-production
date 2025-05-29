@@ -1,14 +1,12 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { createClient } from "./server";
+import { createClient } from "../server";
+import path from "path";
+import fs from "fs";
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
   const data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
@@ -41,7 +39,6 @@ export async function signup(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const username = formData.get("username") as string;
-  const profile_image_url = "default-profile-image";
   const balance = 10; // starting coins (default value)
 
   // Step 1: Sign up user and add public metadata
@@ -64,7 +61,25 @@ export async function signup(formData: FormData) {
     return { success: false, message: "User ID not returned." };
   }
 
-  // Step 2: Insert into your custom Users table
+  // Step 2: Upload default profile image
+  const imagePath = path.join(process.cwd(), "public/images/user-profile.png");
+  const buffer = fs.readFileSync(imagePath);
+  const fileName = `${userId}-default-user-image.png`;
+
+  const { error: uploadError } = await supabase.storage
+    .from("user-profile-pictures")
+    .upload(fileName, buffer, {
+      contentType: "image/png",
+      upsert: true,
+    });
+
+  if (uploadError) {
+    return { success: false, message: uploadError.message };
+  }
+
+  const profile_image_url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/user-profile-pictures/${fileName}`;
+
+  // Step 3: Insert into your custom Users table
   const { error: insertError } = await supabase.from("Users").insert([
     {
       id: userId,

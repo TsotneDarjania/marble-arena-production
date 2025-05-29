@@ -1,0 +1,21 @@
+export type TeamDataType = {
+  attack_speed: string;
+  attack_strategy: string;
+  default_strategy: string;
+  defence_speed: number;
+  defence_strategy: string;
+  fault_possibility: number;
+  goalkeeper_speed: number;
+  id: number;
+  midfielder_speed: number;
+  midfielder_strategy: string;
+  name: string;
+  pass_accuracy: number;
+  pass_speed: number;
+  primary_color: string;
+  secondary_color: string;
+  shoot_accuracy: number;
+  tablo_name: string;
+  team_logo_url: string;
+  fifa_raiting: number;
+};

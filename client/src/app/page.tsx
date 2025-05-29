@@ -5,7 +5,6 @@ import Leaderboard from "./components/liderboard/Liderboard";
 import Features from "./components/features/features";
 import BettingFeature from "./components/betFeature/RulesAndStats";
 import Stats from "./components/stats/Stats";
-import Shadow from "./components/utils/shadow/Shadow";
 import ShadowWrapper from "./components/utils/shadow/shadowWrapper/ShadowWrapper";
 import AuthModal from "./components/utils/authModal/AuthModal";
 

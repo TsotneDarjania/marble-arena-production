@@ -3,7 +3,7 @@
 import { useAppContext } from "@/app/context/AppContexty";
 import styles from "./style.module.css";
 import { useEffect, useState } from "react";
-import { login, signup } from "@/app/utils/supabase/action";
+import { login, signup } from "@/app/utils/supabase/actions/authActions";
 import { InfoModal } from "../infoModal/InfoModal";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -62,7 +62,7 @@ export default function AuthModal() {
       const result = await login(formData);
 
       if (result.success) {
-        window.location.reload();
+        window.location.href = "/";
       } else {
         setWarningText(result.message || "Something went wrong, try again.");
         setIsInfoModalOpen(true);
