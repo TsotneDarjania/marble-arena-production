@@ -76,7 +76,7 @@ export default function Header() {
                   <div className={styles.userProfileImage}>
                     <Image
                       alt="Marble Coin Icon"
-                      src="/images/user-profile.png"
+                      src={user!.profileImage}
                       fill
                       style={{ objectFit: "contain" }}
                     />

@@ -1,0 +1,24 @@
+.adminPage {
+  width: 100vw;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+
+  gap: 20px;
+}
+
+.featureButton {
+  padding: 10px 30px;
+
+  border: 7px rgb(72, 134, 152);
+  border-style: double;
+  background-color: rgb(31, 65, 57);
+  font-size: 2rem;
+  cursor: pointer;
+
+  border-radius: 8px;
+  color: white;
+}
