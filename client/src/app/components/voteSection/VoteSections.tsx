@@ -1,65 +1,130 @@
 "use client";
 
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./style.module.css";
+import { getPromotionTeamsFromDatabase } from "@/app/utils/supabase/actions/getPromotionTeams";
+import { userVoteTeam } from "@/app/utils/supabase/actions/userVoteTeam";
+import { useAppContext } from "@/app/context/AppContexty";
 
-interface Team {
-  name: string;
-  logo: string;
-}
+export type PromotionTeamType = {
+  team_name: string;
+  voted_coins: string;
+  team_logo_url: string;
+};
 
-const teams: Team[] = [
-  {
-    name: "Roma",
-    logo: "/images/teams/roma.png",
-  },
-  {
-    name: "Inter",
-    logo: "/images/teams/inter.png",
-  },
-  {
-    name: "Juventus",
-    logo: "/images/teams/juventus.png",
-  },
-  {
-    name: "Bologna",
-    logo: "/images/teams/bologna.png",
-  },
-];
+type VoteResult =
+  | {
+      success: true;
+      newUserCoins: number;
+      newTeamVotes: number;
+    }
+  | {
+      success: false;
+      message: string;
+    };
 
 export default function VoteSection() {
-  const [votes, setVotes] = useState<Record<string, number>>({});
+  const [teams, setTeams] = useState<PromotionTeamType[]>([]);
+  const [inputValues, setInputValues] = useState<Record<string, string>>({});
+  const [loadingTeamName, setLoadingTeamName] = useState<string | null>(null);
 
-  const handleVote = (teamName: string, amount: number) => {
-    if (!amount || amount <= 0) return;
-    setVotes((prev) => ({
+  const { user, setUser } = useAppContext();
+
+  useEffect(() => {
+    fetchTeams();
+  }, []);
+
+  async function fetchTeams() {
+    const data = await getPromotionTeamsFromDatabase();
+    if (data) setTeams(data);
+  }
+
+  const handleInputChange = (teamName: string, value: string) => {
+    setInputValues((prev) => ({
       ...prev,
-      [teamName]: (prev[teamName] || 0) + amount,
+      [teamName]: value,
     }));
-    console.log(`Voted ${amount} coins for ${teamName}`);
+  };
+
+  const handleVote = async (teamName: string) => {
+    const input = inputValues[teamName];
+    const amount = parseInt(input);
+
+    if (!amount || amount <= 0 || !user) return;
+
+    if (user.coins < amount) {
+      alert("You don't have enough coins to vote!");
+      return;
+    }
+
+    setLoadingTeamName(teamName);
+
+    const result: VoteResult = await userVoteTeam(user.id, teamName, amount);
+
+    if (!result.success) {
+      alert(result.message);
+      setLoadingTeamName(null);
+      return;
+    }
+
+    // Update user coins
+    setUser?.({
+      ...user,
+      coins: result.newUserCoins,
+    });
+
+    // Update team vote count
+    setTeams((prev) =>
+      prev.map((team) =>
+        team.team_name === teamName
+          ? {
+              ...team,
+              voted_coins: result.newTeamVotes.toString(),
+            }
+          : team
+      )
+    );
+
+    // Clear input
+    setInputValues((prev) => ({
+      ...prev,
+      [teamName]: "",
+    }));
+
+    setLoadingTeamName(null);
   };
 
   return (
     <section className={styles.voteSection}>
       <h2 className={styles.title + " title-font"}>
-        VOTE FOR YOUR FAVORITE TEAM
+        VOTE FOR YOUR FAVORITE TEAM FOR PROMOTION
       </h2>
+
       <div className={styles.teamList + " title-font"}>
         {teams.map((team) => (
-          <div className={styles.teamItem} key={team.name}>
-            <img src={team.logo} alt={team.name} className={styles.logo} />
-            <span className={styles.teamName}>{team.name}</span>
+          <div className={styles.teamItem} key={team.team_name}>
+            <img
+              src={team.team_logo_url}
+              alt={team.team_name}
+              className={styles.logo}
+            />
+            <span className={styles.teamName}>{team.team_name}</span>
+
             <div className={styles.voteControls}>
               <label
-                htmlFor={`input-${team.name}`}
+                htmlFor={`input-${team.team_name}`}
                 className={styles.voteLabel}
               >
                 COINS:
               </label>
               <input
                 type="number"
-                id={`input-${team.name}`}
+                id={`input-${team.team_name}`}
                 min="1"
+                value={inputValues[team.team_name] || ""}
+                onChange={(e) =>
+                  handleInputChange(team.team_name, e.target.value)
+                }
                 className={styles.voteInput}
               />
               <img
@@ -69,19 +134,15 @@ export default function VoteSection() {
               />
               <button
                 className={styles.voteButton}
-                onClick={() => {
-                  const input = document.getElementById(
-                    `input-${team.name}`
-                  ) as HTMLInputElement;
-                  handleVote(team.name, parseInt(input.value));
-                  input.value = "";
-                }}
+                disabled={loadingTeamName === team.team_name}
+                onClick={() => handleVote(team.team_name)}
               >
-                VOTE
+                {loadingTeamName === team.team_name ? "Voting..." : "VOTE"}
               </button>
             </div>
+
             <div className={styles.voteCount}>
-              Total Coins: {votes[team.name] || 0}
+              Total Coins: {team.voted_coins}
             </div>
           </div>
         ))}

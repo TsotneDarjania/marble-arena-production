@@ -2,12 +2,25 @@
 
 import Image from "next/image";
 import styles from "./style.module.css";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+
+import { getCurrentLeagueWeek } from "@/app/utils/supabase/actions/getCurrentLeagueWeek";
+import { useAppContext } from "@/app/context/AppContexty";
+import { placeBetInDatabase } from "@/app/utils/supabase/actions/placeBet";
+import { getFixturesForFrontend } from "@/app/utils/supabase/actions/getFixturesForFrontend";
 
 export default function Fixtures() {
-  const currentWeek = 2;
-  const [week, setWeek] = useState(currentWeek);
+  const maxWeek = 9;
+
+  const { user } = useAppContext();
+
+  const [currentWeek, setCurrentWeek] = useState<number | null>(null);
+  const [week, setWeek] = useState<number | null>(null);
   const [openFixtures, setOpenFixtures] = useState<number[]>([]);
+  const [fixturesData, setFixturesData] = useState<Record<
+    string,
+    any[]
+  > | null>(null);
 
   const [bets, setBets] = useState<{
     [fixtureIndex: number]: {
@@ -48,244 +61,84 @@ export default function Fixtures() {
     }));
   };
 
-  const data = {
-    week_1: [
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
+  const placeBet = async (fixtureIndex: number, fixture: any) => {
+    const bet = bets[fixtureIndex];
+
+    if (!bet || !bet.option || bet.amount <= 0) {
+      alert("Please select an option and enter a valid bet amount.");
+      return;
+    }
+
+    const betInfo = {
+      user_id: user!.id,
+      option: bet.option,
+      amount: bet.amount,
+      multiplier: bet.multiplier,
+      potential_win: +(bet.amount * bet.multiplier).toFixed(2),
+      teams: {
+        host: fixture.hosT.teamName,
+        guest: fixture.guest.teamName,
       },
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
+      coefficients: {
+        host: fixture.hosT.winCoefficient,
+        draw: fixture.drawCoefficient,
+        guest: fixture.guest.winCoefficient,
       },
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
-      },
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
-      },
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
-      },
-    ],
-    week_2: [
-      {
-        hosT: {
-          teamName: "Barcelona",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 5,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
-      },
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
-      },
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
-      },
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
-      },
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
-      },
-    ],
-    week_3: [
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
-      },
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
-      },
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
-      },
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
-      },
-      {
-        hosT: {
-          teamName: "Juventus",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 2,
-        },
-        guest: {
-          teamName: "Liverpool",
-          imageSrc: "/images/teams/Bologna.png",
-          winCoefficient: 3,
-        },
-        drawCoefficient: 4,
-        date: "FRY : 12:00",
-        result: "0 - 0",
-      },
-    ],
+      result: "unknown",
+    };
+
+    const result = await placeBetInDatabase(betInfo);
+
+    if (result.success) {
+      alert(`✅ Bet placed! New balance: ${result.newBalance}`);
+      // Optional: update frontend balance or reset bet
+      setBets((prev) => {
+        const copy = { ...prev };
+        delete copy[fixtureIndex];
+        return copy;
+      });
+
+      window.location.href = "/profile";
+    } else {
+      alert(`❌ Failed to place bet: ${result.message}`);
+    }
   };
 
-  const currentWeekKey = `week_${week}` as keyof typeof data;
+  useEffect(() => {
+    (async () => {
+      const res = await getCurrentLeagueWeek();
+      if (res.success && res.currentWeek !== null) {
+        setCurrentWeek(res.currentWeek);
+        setWeek(res.currentWeek);
+      } else {
+        console.warn("Could not determine current week:", res.message);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (currentWeek === null) return;
+
+    (async () => {
+      const response = await getFixturesForFrontend();
+      if (response.success) {
+        setFixturesData(response.data ?? null);
+      } else {
+        console.error("Failed to load fixtures:", response.message);
+      }
+    })();
+  }, [currentWeek]);
+
+  if (currentWeek === null || week === null || !fixturesData) {
+    return <div className="text-font">Loading fixtures...</div>;
+  }
+
+  const currentWeekKey = `week_${week}`;
+  const fixtures = fixturesData[currentWeekKey] || [];
 
   const handlePrevious = () => {
     setWeek((prev) => {
+      if (prev === null) return prev;
       const newWeek = prev > 1 ? prev - 1 : prev;
       setOpenFixtures([]);
       return newWeek;
@@ -294,7 +147,8 @@ export default function Fixtures() {
 
   const handleNext = () => {
     setWeek((prev) => {
-      const newWeek = prev < 3 ? prev + 1 : prev;
+      if (prev === null) return prev;
+      const newWeek = prev < maxWeek ? prev + 1 : prev;
       setOpenFixtures([]);
       return newWeek;
     });
@@ -312,15 +166,15 @@ export default function Fixtures() {
         <span className={styles.weekLabel}>Week {week}</span>
         <button
           onClick={handleNext}
-          style={{ opacity: week === Object.keys(data).length ? "0" : "1" }}
+          style={{ opacity: week >= maxWeek ? "0" : "1" }}
         >
           Next →
         </button>
       </div>
 
       <div className={styles.fixtures}>
-        {data[currentWeekKey].map((item, index) => (
-          <Fragment key={index + item.date}>
+        {fixtures.map((item, index) => (
+          <Fragment key={index}>
             <div className={styles.fixture}>
               <div className={styles.teamInitials + " justify-end"}>
                 <div className={styles.teamLogo}>
@@ -428,7 +282,10 @@ export default function Fixtures() {
                     ? bets[index].amount * bets[index].multiplier
                     : 0}
                 </div>
-                <button className={styles.submitBetBtn + " text-font"}>
+                <button
+                  className={styles.submitBetBtn + " text-font"}
+                  onClick={() => placeBet(index, item)}
+                >
                   Submit
                 </button>
               </div>

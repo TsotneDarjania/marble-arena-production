@@ -1,130 +1,46 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./style.module.css";
+import { getLatestLeagueFromDatabase } from "@/app/utils/supabase/actions/getLeagueFromDatabase";
 
-const teams = [
-  {
-    logo: "/images/teams/Roma.png",
-    name: "Roma",
-    p: 10,
-    w: 6,
-    d: 1,
-    l: 3,
-    gf: 18,
-    ga: 12,
-    gd: 6,
-    pts: 19,
-  },
-  {
-    logo: "/images/teams/Inter.png",
-    name: "Inter",
-    p: 10,
-    w: 5,
-    d: 2,
-    l: 3,
-    gf: 15,
-    ga: 11,
-    gd: 4,
-    pts: 17,
-  },
-  {
-    logo: "/images/teams/Juventus.png",
-    name: "Juventus",
-    p: 10,
-    w: 5,
-    d: 1,
-    l: 4,
-    gf: 14,
-    ga: 12,
-    gd: 2,
-    pts: 16,
-  },
-  {
-    logo: "/images/teams/Bologna.png",
-    name: "Bologna",
-    p: 10,
-    w: 4,
-    d: 3,
-    l: 3,
-    gf: 12,
-    ga: 11,
-    gd: 1,
-    pts: 15,
-  },
-  {
-    logo: "/images/teams/Juventus.png",
-    name: "dqwed123d12e12e",
-    p: 10,
-    w: 5,
-    d: 1,
-    l: 4,
-    gf: 14,
-    ga: 12,
-    gd: 2,
-    pts: 16,
-  },
-  {
-    logo: "/images/teams/Juventus.png",
-    name: "232fwefwfe",
-    p: 10,
-    w: 5,
-    d: 1,
-    l: 4,
-    gf: 14,
-    ga: 12,
-    gd: 2,
-    pts: 16,
-  },
-  {
-    logo: "/images/teams/Juventus.png",
-    name: "asfwevgeref23fr2",
-    p: 10,
-    w: 5,
-    d: 1,
-    l: 4,
-    gf: 14,
-    ga: 12,
-    gd: 2,
-    pts: 16,
-  },
-  {
-    logo: "/images/teams/Juventus.png",
-    name: "g3rg4",
-    p: 10,
-    w: 5,
-    d: 1,
-    l: 4,
-    gf: 14,
-    ga: 12,
-    gd: 2,
-    pts: 16,
-  },
-  {
-    logo: "/images/teams/Juventus.png",
-    name: "saczxcsdqds",
-    p: 10,
-    w: 5,
-    d: 1,
-    l: 4,
-    gf: 14,
-    ga: 12,
-    gd: 2,
-    pts: 16,
-  },
-  {
-    logo: "/images/teams/Juventus.png",
-    name: "asdqwdqwd",
-    p: 10,
-    w: 5,
-    d: 1,
-    l: 4,
-    gf: 14,
-    ga: 12,
-    gd: 2,
-    pts: 16,
-  },
-];
+type StandingEntry = {
+  d: number;
+  i: number;
+  p: number;
+  w: number;
+  ga: number;
+  gd: number;
+  gf: number;
+  pts: number;
+  teamId: number;
+  position: number;
+  teamName: string;
+  teamLogoUrl: string;
+};
 
 export default function Standings() {
+  const [week1Standings, setWeek1Standings] = useState<StandingEntry[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const league = await getLatestLeagueFromDatabase();
+
+      if (league && Array.isArray(league.standings)) {
+        const firstWeek = league.standings[0]; // week 1
+
+        if (Array.isArray(firstWeek)) {
+          setWeek1Standings(firstWeek);
+        } else {
+          console.error("Week 1 standings is not an array");
+        }
+      } else {
+        console.error("Invalid league data");
+      }
+    })();
+  }, []);
+
   return (
     <div className={styles.standings}>
       <div className={styles.leagueLogo}>
@@ -154,17 +70,22 @@ export default function Standings() {
           </tr>
         </thead>
         <tbody>
-          {teams.map((team, i) => (
-            <tr key={team.name}>
+          {week1Standings.map((team, i) => (
+            <tr key={team.teamId}>
               <td>{i + 1}</td>
               <td className={styles.teamCell}>
-                <Image src={team.logo} alt={team.name} width={30} height={30} />
-                <span>{team.name}</span>
+                <Image
+                  src={team.teamLogoUrl}
+                  alt={team.teamName}
+                  width={30}
+                  height={30}
+                />
+                <span>{team.teamName}</span>
               </td>
               <td>{team.p}</td>
               <td>{team.w}</td>
               <td>{team.d}</td>
-              <td>{team.l}</td>
+              <td>{team.i}</td>
               <td>{team.gf}</td>
               <td>{team.ga}</td>
               <td>{team.gd}</td>

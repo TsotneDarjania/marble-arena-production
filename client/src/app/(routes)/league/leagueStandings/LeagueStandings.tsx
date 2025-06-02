@@ -1,199 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./style.module.css";
+import { getLatestLeagueFromDatabase } from "@/app/utils/supabase/actions/getLeagueFromDatabase";
 
-// Simulated 10 weeks of data
-const weeksData = [
-  // Week 1
-  [
-    {
-      logo: "/images/teams/Roma.png",
-      name: "Roma",
-      p: 10,
-      w: 6,
-      d: 1,
-      l: 3,
-      gf: 18,
-      ga: 12,
-      gd: 6,
-      pts: 19,
-    },
-    {
-      logo: "/images/teams/Inter.png",
-      name: "Inter",
-      p: 10,
-      w: 5,
-      d: 2,
-      l: 3,
-      gf: 15,
-      ga: 11,
-      gd: 4,
-      pts: 17,
-    },
-    {
-      logo: "/images/teams/Roma.png",
-      name: "Rasddqwdoma",
-      p: 10,
-      w: 6,
-      d: 1,
-      l: 3,
-      gf: 18,
-      ga: 12,
-      gd: 6,
-      pts: 19,
-    },
-    {
-      logo: "/images/teams/Roma.png",
-      name: "Rdqoma",
-      p: 10,
-      w: 6,
-      d: 1,
-      l: 3,
-      gf: 18,
-      ga: 12,
-      gd: 6,
-      pts: 19,
-    },
-    {
-      logo: "/images/teams/Roma.png",
-      name: "Rqweoma",
-      p: 10,
-      w: 6,
-      d: 1,
-      l: 3,
-      gf: 18,
-      ga: 12,
-      gd: 6,
-      pts: 19,
-    },
-    {
-      logo: "/images/teams/Roma.png",
-      name: "Rasdasdoma",
-      p: 10,
-      w: 6,
-      d: 1,
-      l: 3,
-      gf: 18,
-      ga: 12,
-      gd: 6,
-      pts: 19,
-    },
-    {
-      logo: "/images/teams/Roma.png",
-      name: "Roasdasdma",
-      p: 10,
-      w: 6,
-      d: 1,
-      l: 3,
-      gf: 18,
-      ga: 12,
-      gd: 6,
-      pts: 19,
-    },
-    {
-      logo: "/images/teams/Roma.png",
-      name: "Rowema",
-      p: 10,
-      w: 6,
-      d: 1,
-      l: 3,
-      gf: 18,
-      ga: 12,
-      gd: 6,
-      pts: 19,
-    },
-    {
-      logo: "/images/teams/Roma.png",
-      name: "Rom1e2a",
-      p: 10,
-      w: 6,
-      d: 1,
-      l: 3,
-      gf: 18,
-      ga: 12,
-      gd: 6,
-      pts: 19,
-    },
-    {
-      logo: "/images/teams/Roma.png",
-      name: "Romqwea",
-      p: 10,
-      w: 6,
-      d: 1,
-      l: 3,
-      gf: 18,
-      ga: 12,
-      gd: 6,
-      pts: 19,
-    },
-    // ...add more teams
-  ],
-  // Week 2
-  [
-    {
-      logo: "/images/teams/Inter.png",
-      name: "Inter",
-      p: 11,
-      w: 6,
-      d: 2,
-      l: 3,
-      gf: 17,
-      ga: 12,
-      gd: 5,
-      pts: 20,
-    },
-    {
-      logo: "/images/teams/Roma.png",
-      name: "Romaqwe",
-      p: 11,
-      w: 6,
-      d: 1,
-      l: 4,
-      gf: 19,
-      ga: 14,
-      gd: 5,
-      pts: 19,
-    },
-    // ...add more teams
-  ],
+type StandingEntry = {
+  d: number;
+  i: number;
+  p: number;
+  w: number;
+  ga: number;
+  gd: number;
+  gf: number;
+  pts: number;
+  teamId: number;
+  position: number;
+  teamName: string;
+  teamLogoUrl: string;
+};
 
-  [
-    {
-      logo: "/images/teams/Inter.png",
-      name: "Inter",
-      p: 11,
-      w: 6,
-      d: 2,
-      l: 3,
-      gf: 17,
-      ga: 12,
-      gd: 5,
-      pts: 20,
-    },
-    {
-      logo: "/images/teams/Roma.png",
-      name: "Romaasd",
-      p: 11,
-      w: 6,
-      d: 1,
-      l: 4,
-      gf: 19,
-      ga: 14,
-      gd: 5,
-      pts: 19,
-    },
-    // ...add more teams
-  ],
-  // ...add week 3-10
-];
-
-export default function LeagueStandings() {
+export default function Standings() {
+  const [standingsHistory, setStandingsHistory] = useState<StandingEntry[][]>(
+    []
+  );
   const [currentWeek, setCurrentWeek] = useState(1);
-  const totalWeeks = weeksData.length;
+  const [maxWeek, setMaxWeek] = useState(0); // last played week from backend
 
-  const currentStandings = weeksData[currentWeek - 1];
+  useEffect(() => {
+    (async () => {
+      const latestLeague = await getLatestLeagueFromDatabase();
+
+      if (latestLeague?.standings) {
+        const fixedStandings: StandingEntry[][] = Array.isArray(
+          latestLeague.standings[0]
+        )
+          ? (latestLeague.standings as unknown as StandingEntry[][])
+          : [latestLeague.standings as StandingEntry[]];
+
+        setStandingsHistory(fixedStandings);
+        setCurrentWeek(latestLeague.week);
+        setMaxWeek(latestLeague.standings.length);
+      }
+    })();
+  }, []);
+
+  const currentStandings = standingsHistory[currentWeek - 1] || [];
 
   return (
     <div className={styles.standings}>
@@ -207,6 +59,7 @@ export default function LeagueStandings() {
       </div>
 
       <h2 className={styles.title + " title-font"}>LEAGUE STANDINGS</h2>
+
       <div className={styles.weekNav + " text-font"}>
         {currentWeek > 1 && (
           <button
@@ -217,7 +70,7 @@ export default function LeagueStandings() {
           </button>
         )}
         <h3 className={styles.weekTitle + " title-font"}>Week {currentWeek}</h3>
-        {currentWeek < totalWeeks && (
+        {currentWeek < maxWeek && (
           <button
             className={styles.nextBtn}
             onClick={() => setCurrentWeek(currentWeek + 1)}
@@ -244,16 +97,21 @@ export default function LeagueStandings() {
         </thead>
         <tbody>
           {currentStandings.map((team, i) => (
-            <tr key={team.name}>
+            <tr key={team.teamId}>
               <td>{i + 1}</td>
               <td className={styles.teamCell}>
-                <Image src={team.logo} alt={team.name} width={30} height={30} />
-                <span>{team.name}</span>
+                <Image
+                  src={team.teamLogoUrl}
+                  alt={team.teamName}
+                  width={30}
+                  height={30}
+                />
+                <span>{team.teamName}</span>
               </td>
               <td>{team.p}</td>
               <td>{team.w}</td>
               <td>{team.d}</td>
-              <td>{team.l}</td>
+              <td>{team.i}</td>
               <td>{team.gf}</td>
               <td>{team.ga}</td>
               <td>{team.gd}</td>

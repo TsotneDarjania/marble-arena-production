@@ -1,6 +1,17 @@
 import Image from "next/image";
 import styles from "./style.module.css";
 
+type TicketProps = {
+  hostTeamName: string;
+  guesteamName: string;
+  hostScore: number | null;
+  guestScore: number | null;
+  date: string;
+  selectedOption: 0 | 1 | 2;
+  isCorrectTicket: boolean | null;
+  coinResult: number;
+};
+
 export default function Ticket({
   hostTeamName,
   guesteamName,
@@ -10,17 +21,11 @@ export default function Ticket({
   selectedOption,
   isCorrectTicket,
   coinResult,
-}: {
-  hostTeamName: string;
-  guesteamName: string;
-  hostScore: number;
-  guestScore: number;
-  date: string;
-  selectedOption: 0 | 1 | 2;
-  isCorrectTicket: boolean;
-  coinResult: number;
-}) {
+}: TicketProps) {
   const betOptions = [`${hostTeamName} Win`, "Draw", `${guesteamName} Win`];
+
+  // ✅ Match is active if there's no score yet
+  const isMatchActive = hostScore === null || guestScore === null;
 
   return (
     <div className={styles.ticket}>
@@ -40,9 +45,9 @@ export default function Ticket({
         </div>
 
         <div className={styles.scoreResult}>
-          <p>{hostScore}</p>
+          <p>{hostScore ?? "-"}</p>
           <p>-</p>
-          <p>{guestScore}</p>
+          <p>{guestScore ?? "-"}</p>
         </div>
 
         <div className={styles.teamInitials}>
@@ -57,7 +62,9 @@ export default function Ticket({
           </div>
         </div>
 
-        {isCorrectTicket ? (
+        {isMatchActive ? (
+          <p className={styles.activeResult}>ACTIVE</p>
+        ) : isCorrectTicket ? (
           <p className={styles.correctResult}>+{coinResult}</p>
         ) : (
           <p className={styles.wrongResult}>-{coinResult}</p>
@@ -69,9 +76,11 @@ export default function Ticket({
           const isSelected = selectedOption === index;
 
           let optionClass = styles.betOptionItem;
-          if (isSelected && isCorrectTicket) {
+          if (isMatchActive && isSelected) {
+            optionClass += " " + styles.neutralSelectedBetOption;
+          } else if (isSelected && isCorrectTicket) {
             optionClass += " " + styles.correctSeletcedBetOption;
-          } else if (isSelected && !isCorrectTicket) {
+          } else if (isSelected && isCorrectTicket === false) {
             optionClass += " " + styles.wrongSeletcedBetOption;
           }
 
