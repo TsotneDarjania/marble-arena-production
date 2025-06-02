@@ -62,8 +62,10 @@ export async function signup(formData: FormData) {
   }
 
   // Step 2: Upload default profile image
-  const imagePath = path.join(process.cwd(), "public/images/user-profile.png");
-  const buffer = fs.readFileSync(imagePath);
+  const imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/images/user-profile.png`;
+  const response = await fetch(imageUrl);
+  const buffer = Buffer.from(await response.arrayBuffer());
+
   const fileName = `${userId}-default-user-image.png`;
 
   const { error: uploadError } = await supabase.storage
