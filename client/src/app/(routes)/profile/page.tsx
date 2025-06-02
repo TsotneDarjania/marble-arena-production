@@ -21,10 +21,26 @@ export type TicketData = {
   coinResult: number;
 };
 
+type RawTicketData = {
+  option: "host" | "draw" | "guest";
+  result: "host" | "draw" | "guest" | "unknown";
+  created_at: string;
+  potential_win: number;
+  teams: {
+    host: string;
+    guest: string;
+  };
+};
+
 const TICKETS_PER_PAGE = 6;
 
 export default function ProfilePage() {
   const { user } = useAppContext();
+
+  // ✅ HOOKS must be declared unconditionally at the top
+  const [page, setPage] = useState(1);
+  const [tickets, setTickets] = useState<TicketData[]>([]);
+  const [clickedLogOut, setClickedLogOut] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -32,11 +48,67 @@ export default function ProfilePage() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!user) return;
+
+    (async () => {
+      const response = await getUserTickets(user.id);
+      if (response.success && response.data) {
+        const transformed = (response.data as RawTicketData[]).map(
+          (ticket): TicketData => {
+            const option =
+              ticket.option === "host" ? 0 : ticket.option === "draw" ? 1 : 2;
+
+            const isCorrect =
+              ticket.result === "unknown"
+                ? false
+                : (ticket.result === "host" && option === 0) ||
+                  (ticket.result === "draw" && option === 1) ||
+                  (ticket.result === "guest" && option === 2);
+
+            return {
+              hostTeamName: ticket.teams.host,
+              guesteamName: ticket.teams.guest,
+              hostScore:
+                ticket.result === "unknown"
+                  ? null
+                  : ticket.result === "host"
+                  ? 2
+                  : ticket.result === "guest"
+                  ? 1
+                  : 1,
+              guestScore:
+                ticket.result === "unknown"
+                  ? null
+                  : ticket.result === "guest"
+                  ? 2
+                  : ticket.result === "host"
+                  ? 0
+                  : 1,
+              date: new Date(ticket.created_at).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              }),
+              selectedOption: option,
+              isCorrectTicket: isCorrect,
+              coinResult: isCorrect ? ticket.potential_win : 0,
+            };
+          }
+        );
+
+        setTickets(transformed);
+      }
+    })();
+  }, [user]);
+
   if (!user) return null;
 
-  const [page, setPage] = useState(1);
-  const [tickets, setTickets] = useState<TicketData[]>([]);
-  const [clickedLogOut, setClickedLogOut] = useState(false);
+  const totalPages = Math.ceil(tickets.length / TICKETS_PER_PAGE);
+  const paginatedTickets = tickets.slice(
+    (page - 1) * TICKETS_PER_PAGE,
+    page * TICKETS_PER_PAGE
+  );
 
   async function handleUpdateUsername(newUsername: string) {
     const res = await fetch("/api/updateUsername", {
@@ -112,62 +184,6 @@ export default function ProfilePage() {
     alert("Account deleted successfully.");
     window.location.href = "/";
   }
-
-  useEffect(() => {
-    (async () => {
-      const response = await getUserTickets(user.id);
-      if (response.success && response.data) {
-        const transformed = response.data.map((ticket: any): TicketData => {
-          const option =
-            ticket.option === "host" ? 0 : ticket.option === "draw" ? 1 : 2;
-
-          const isCorrect =
-            ticket.result === "unknown"
-              ? false
-              : (ticket.result === "host" && option === 0) ||
-                (ticket.result === "draw" && option === 1) ||
-                (ticket.result === "guest" && option === 2);
-
-          return {
-            hostTeamName: ticket.teams.host,
-            guesteamName: ticket.teams.guest,
-            hostScore:
-              ticket.result === "unknown"
-                ? null
-                : ticket.result === "host"
-                ? 2
-                : ticket.result === "guest"
-                ? 1
-                : 1,
-            guestScore:
-              ticket.result === "unknown"
-                ? null
-                : ticket.result === "guest"
-                ? 2
-                : ticket.result === "host"
-                ? 0
-                : 1,
-            date: new Date(ticket.created_at).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            }),
-            selectedOption: option,
-            isCorrectTicket: isCorrect,
-            coinResult: isCorrect ? ticket.potential_win : 0,
-          };
-        });
-
-        setTickets(transformed);
-      }
-    })();
-  }, [user]);
-
-  const totalPages = Math.ceil(tickets.length / TICKETS_PER_PAGE);
-  const paginatedTickets = tickets.slice(
-    (page - 1) * TICKETS_PER_PAGE,
-    page * TICKETS_PER_PAGE
-  );
 
   async function handleLogOut() {
     setClickedLogOut(true);
