@@ -13,7 +13,7 @@ export default function CreateLeagueWindow() {
   );
 
   useEffect(() => {
-    (async () => {
+    void (async () => {
       const response = await getTeamsFromDatabase();
       if (response.success) {
         setTeams(response.data);
