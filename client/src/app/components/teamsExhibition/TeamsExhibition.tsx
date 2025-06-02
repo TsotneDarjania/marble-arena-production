@@ -1,25 +1,38 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./style.module.css";
-
-const logos = [
-  "/images/teams/Bologna.png",
-  "/images/teams/Inter.png",
-  "/images/teams/Juventus.png",
-  "/images/teams/Roma.png",
-];
+import { getTeamsFromDatabase } from "@/app/utils/supabase/actions/getTeams";
+import { TeamDataType } from "@/app/types/gameDataTypes";
 
 export default function TeamsExhibition() {
-  const allLogos = [...logos, ...logos, ...logos, ...logos, ...logos, ...logos]; // 4x to fully cover long scroll
+  const [logos, setLogos] = useState<string[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await getTeamsFromDatabase();
+      if (response.success) {
+        const validLogos = response.data
+          .map((team: TeamDataType) => team.team_logo_url)
+          .filter((url) => url); // remove null/undefined
+        const repeated = Array(3).fill(validLogos).flat(); // Repeat for scroll
+        setLogos(repeated);
+      } else {
+        console.error("Failed to load teams:", response.message);
+      }
+    })();
+  }, []);
 
   return (
     <section className={styles.wrapper}>
       <h2 className="title-font">Marble Teams</h2>
       <div className={styles.marquee}>
         <div className={styles.track}>
-          {allLogos.map((src, index) => (
+          {logos.map((src, index) => (
             <div key={index} className={styles.logo}>
               <Image
-                alt="Partner logo"
+                alt="Team logo"
                 src={src}
                 fill
                 style={{ objectFit: "contain" }}

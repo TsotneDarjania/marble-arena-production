@@ -4,105 +4,167 @@ import { useAppContext } from "@/app/context/AppContexty";
 import styles from "./style.module.css";
 import Image from "next/image";
 import Ticket from "@/app/components/ticket/Ticket";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { logout } from "@/app/utils/supabase/actions/authActions";
 import Shadow from "@/app/components/utils/shadow/Shadow";
+import { getUserTickets } from "@/app/utils/supabase/actions/getUserTickets";
+import { deleteUser } from "@/app/utils/supabase/actions/deleteUser";
 
-type TicketData = {
+export type TicketData = {
   hostTeamName: string;
   guesteamName: string;
-  hostScore: number;
-  guestScore: number;
+  hostScore: number | null;
+  guestScore: number | null;
   date: string;
   selectedOption: 0 | 1 | 2;
   isCorrectTicket: boolean;
   coinResult: number;
 };
 
-const MOCK_TICKETS: TicketData[] = [
-  {
-    hostTeamName: "Barcelona",
-    guesteamName: "Real Madrid",
-    hostScore: 2,
-    guestScore: 0,
-    date: "Apr 11, 2025",
-    selectedOption: 0,
-    isCorrectTicket: false,
-    coinResult: 12,
-  },
-  {
-    hostTeamName: "Barcelona",
-    guesteamName: "Real Madrid",
-    hostScore: 2,
-    guestScore: 0,
-    date: "Apr 11, 2025",
-    selectedOption: 1,
-    isCorrectTicket: true,
-    coinResult: 123,
-  },
-  // Add more mock tickets...
-  {
-    hostTeamName: "Barcelona",
-    guesteamName: "Real Madrid",
-    hostScore: 2,
-    guestScore: 0,
-    date: "Apr 11, 2025",
-    selectedOption: 2,
-    isCorrectTicket: true,
-    coinResult: 43,
-  },
-  {
-    hostTeamName: "Barcelona",
-    guesteamName: "Real Madrid",
-    hostScore: 2,
-    guestScore: 0,
-    date: "Apr 11, 2025",
-    selectedOption: 2,
-    isCorrectTicket: true,
-    coinResult: 76,
-  },
-  {
-    hostTeamName: "Barcelona",
-    guesteamName: "Real Madrid",
-    hostScore: 2,
-    guestScore: 0,
-    date: "Apr 11, 2025",
-    selectedOption: 1,
-    isCorrectTicket: false,
-    coinResult: 5,
-  },
-  {
-    hostTeamName: "Barcelona",
-    guesteamName: "Real Madrid",
-    hostScore: 2,
-    guestScore: 0,
-    date: "Apr 11, 2025",
-    selectedOption: 0,
-    isCorrectTicket: true,
-    coinResult: 88,
-  },
-  {
-    hostTeamName: "Barcelona",
-    guesteamName: "Real Madrid",
-    hostScore: 2,
-    guestScore: 0,
-    date: "Apr 11, 2025",
-    selectedOption: 1,
-    isCorrectTicket: false,
-    coinResult: 0,
-  },
-];
-
 const TICKETS_PER_PAGE = 6;
 
 export default function ProfilePage() {
   const { user } = useAppContext();
-  const [page, setPage] = useState(1);
 
+  useEffect(() => {
+    if (!user) {
+      window.location.href = "/";
+    }
+  }, [user]);
+
+  if (!user) return null;
+
+  const [page, setPage] = useState(1);
+  const [tickets, setTickets] = useState<TicketData[]>([]);
   const [clickedLogOut, setClickedLogOut] = useState(false);
 
-  const totalPages = Math.ceil(MOCK_TICKETS.length / TICKETS_PER_PAGE);
-  const paginatedTickets = MOCK_TICKETS.slice(
+  async function handleUpdateUsername(newUsername: string) {
+    const res = await fetch("/api/updateUsername", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: user!.id, username: newUsername }),
+    });
+
+    const result = await res.json();
+
+    if (result.success) {
+      alert("Username updated!");
+      window.location.reload();
+    } else {
+      alert("Error updating username: " + result.message);
+    }
+  }
+
+  async function handleUpdateProfilePicture() {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+
+    fileInput.onchange = async () => {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("userId", user!.id);
+
+      const res = await fetch("/api/updateProfilePicture", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        alert("Profile picture updated!");
+        window.location.reload();
+      } else {
+        alert("Error: " + result.message);
+      }
+    };
+
+    fileInput.click();
+  }
+
+  async function handleDeleteAccount() {
+    const confirmed = confirm(
+      "Are you sure? This will permanently delete your account."
+    );
+    if (!confirmed) return;
+
+    const cleanupResult = await deleteUser(user!.id);
+    if (!cleanupResult.success) {
+      alert("Error during cleanup: " + cleanupResult.message);
+      return;
+    }
+
+    const res = await fetch("/api/deleteUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: user!.id }),
+    });
+
+    const result = await res.json();
+    if (!result.success) {
+      alert("Error deleting auth user: " + result.message);
+      return;
+    }
+
+    alert("Account deleted successfully.");
+    window.location.href = "/";
+  }
+
+  useEffect(() => {
+    (async () => {
+      const response = await getUserTickets(user.id);
+      if (response.success && response.data) {
+        const transformed = response.data.map((ticket: any): TicketData => {
+          const option =
+            ticket.option === "host" ? 0 : ticket.option === "draw" ? 1 : 2;
+
+          const isCorrect =
+            ticket.result === "unknown"
+              ? false
+              : (ticket.result === "host" && option === 0) ||
+                (ticket.result === "draw" && option === 1) ||
+                (ticket.result === "guest" && option === 2);
+
+          return {
+            hostTeamName: ticket.teams.host,
+            guesteamName: ticket.teams.guest,
+            hostScore:
+              ticket.result === "unknown"
+                ? null
+                : ticket.result === "host"
+                ? 2
+                : ticket.result === "guest"
+                ? 1
+                : 1,
+            guestScore:
+              ticket.result === "unknown"
+                ? null
+                : ticket.result === "guest"
+                ? 2
+                : ticket.result === "host"
+                ? 0
+                : 1,
+            date: new Date(ticket.created_at).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            }),
+            selectedOption: option,
+            isCorrectTicket: isCorrect,
+            coinResult: isCorrect ? ticket.potential_win : 0,
+          };
+        });
+
+        setTickets(transformed);
+      }
+    })();
+  }, [user]);
+
+  const totalPages = Math.ceil(tickets.length / TICKETS_PER_PAGE);
+  const paginatedTickets = tickets.slice(
     (page - 1) * TICKETS_PER_PAGE,
     page * TICKETS_PER_PAGE
   );
@@ -110,7 +172,6 @@ export default function ProfilePage() {
   async function handleLogOut() {
     setClickedLogOut(true);
     const result = await logout();
-
     if (result.success) {
       window.location.href = "/";
     }
@@ -118,11 +179,10 @@ export default function ProfilePage() {
 
   return (
     <div className={styles.profilePage}>
-      {/* User Header */}
       <div className={styles.userInitials}>
         <div className={styles.avatar}>
           <Image
-            src={user!.profileImage}
+            src={user.profileImage}
             alt="User Avatar"
             fill
             objectFit="contain"
@@ -131,7 +191,6 @@ export default function ProfilePage() {
         <h1 className={styles.title + " title-font"}>{user?.username}</h1>
       </div>
 
-      {/* Logout */}
       <div className={styles.logout}>
         <div className={styles.logOutIcon}>
           <Image
@@ -146,7 +205,6 @@ export default function ProfilePage() {
         </p>
       </div>
 
-      {/* Balance */}
       <div className={styles.content}>
         <div className="flex justify-center w-full">
           <div className={styles.item}>
@@ -160,7 +218,9 @@ export default function ProfilePage() {
                   objectFit="contain"
                 />
               </div>
-              <p className={styles.itemText + " text-4xl text-font"}>3</p>
+              <p className={styles.itemText + " text-4xl text-font"}>
+                {user?.coins}
+              </p>
             </div>
           </div>
         </div>
@@ -170,30 +230,44 @@ export default function ProfilePage() {
           User Settings
         </h2>
 
-        {/* Settings */}
-        {[
-          { label: "Delete Account", icon: "delete.png" },
-          { label: "Update Username", icon: "update-username.png" },
-          {
-            label: "Update Profile Picture",
-            icon: "update-profile-picture.png",
-          },
-        ].map(({ label, icon }, i) => (
-          <div key={i} className="flex items-center cursor-pointer">
-            <div className={styles.itemLogo + " ml-[-5px]"}>
-              <Image
-                src={`/images/${icon}`}
-                alt={label}
-                fill
-                objectFit="contain"
-              />
+        {["Delete Account", "Update Username", "Update Profile Picture"].map(
+          (label, i) => (
+            <div
+              onClick={() => {
+                if (label === "Delete Account") handleDeleteAccount();
+                if (label === "Update Username") {
+                  const newUsername = prompt("Enter your new username:");
+                  if (newUsername && newUsername.trim() !== "") {
+                    handleUpdateUsername(newUsername.trim());
+                  }
+                }
+                if (label === "Update Profile Picture") {
+                  handleUpdateProfilePicture();
+                }
+              }}
+              key={i}
+              className="flex items-center cursor-pointer"
+            >
+              <div className={styles.itemLogo + " ml-[-5px]"}>
+                <Image
+                  src={`/images/${
+                    label === "Delete Account"
+                      ? "delete"
+                      : label === "Update Username"
+                      ? "update-username"
+                      : "update-profile-picture"
+                  }.png`}
+                  alt={label}
+                  fill
+                  objectFit="contain"
+                />
+              </div>
+              <p className={styles.itemText + " text-4xl text-font"}>{label}</p>
             </div>
-            <p className={styles.itemText + " text-4xl text-font"}>{label}</p>
-          </div>
-        ))}
+          )
+        )}
       </div>
 
-      {/* Bet History */}
       <div>
         <div className={styles.betHistoryHead}>
           <div className={styles.betLogo + " ml-[-10px]"}>
@@ -206,26 +280,13 @@ export default function ProfilePage() {
           </div>
           <h2 className="text-font">Bet History</h2>
         </div>
-        <div className={styles.totalResults + " text-font"}>
-          <p className={styles.negative}>
-            Total Lost: <span>-12</span>
-          </p>
-          <p className={styles.positive}>
-            Total Won: <span>+123</span>
-          </p>
-          <p className={styles.net}>
-            Result: <span>+111</span>
-          </p>
-        </div>
 
-        {/* Tickets */}
         <div className={styles.tickets}>
           {paginatedTickets.map((ticket, i) => (
             <Ticket key={i} {...ticket} />
           ))}
         </div>
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className={styles.pagination}>
             {[...Array(totalPages)].map((_, index) => (
@@ -244,6 +305,7 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
+
       {clickedLogOut && <Shadow />}
     </div>
   );

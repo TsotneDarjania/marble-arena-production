@@ -1,3 +1,4 @@
+/* ✅ KEEP YOUR ORIGINAL STYLES */
 .adminPage {
   width: 100vw;
 
@@ -8,6 +9,8 @@
   text-align: center;
 
   gap: 20px;
+
+  padding: 50px;
 }
 
 .featureButton {
@@ -21,4 +24,77 @@
 
   border-radius: 8px;
   color: white;
+}
+
+/* ✅ NEW CLASSES BELOW */
+
+.weekSection {
+  width: 100%;
+  max-width: 800px;
+  background-color: #1e1e1e;
+  padding: 30px;
+  border-radius: 12px;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-size: 1.6rem;
+}
+
+.weekTitle {
+  font-size: 2rem;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.fixtureRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px;
+  background-color: #2c2c2c;
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+
+.teamColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 100px;
+}
+
+.teamName {
+  color: white;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.vsText {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+.playButton {
+  padding: 6px 16px;
+  background-color: #008f7a;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.playButton:hover {
+  background-color: #00a990;
+}
+
+.resultText {
+  color: #7fff8f;
+  font-weight: bold;
+  font-size: 1.6rem;
 }
