@@ -73,6 +73,7 @@ export default function AuthModal() {
 
       if (result.success) {
         setisLoginState(true);
+        window.location.reload();
       } else {
         setWarningText(result.message || "Something went wrong, try again.");
         setIsInfoModalOpen(true);
