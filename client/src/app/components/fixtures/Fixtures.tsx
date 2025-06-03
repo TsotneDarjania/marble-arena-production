@@ -11,7 +11,6 @@ import { getFixturesForFrontend } from "@/app/utils/supabase/actions/getFixtures
 
 export default function Fixtures() {
   const maxWeek = 9;
-
   const { user } = useAppContext();
 
   const [currentWeek, setCurrentWeek] = useState<number | null>(null);
@@ -76,28 +75,29 @@ export default function Fixtures() {
       multiplier: bet.multiplier,
       potential_win: +(bet.amount * bet.multiplier).toFixed(2),
       teams: {
-        host: fixture.hosT.teamName,
+        host: fixture.host.teamName,
         guest: fixture.guest.teamName,
+        hostTeamLogoUrl: fixture.host.imageSrc,
+        guestTeamLogoUrl: fixture.guest.imageSrc,
       },
       coefficients: {
-        host: fixture.hosT.winCoefficient,
+        host: fixture.host.winCoefficient,
         draw: fixture.drawCoefficient,
         guest: fixture.guest.winCoefficient,
       },
       result: "unknown",
+      week: week!,
     };
 
     const result = await placeBetInDatabase(betInfo);
 
     if (result.success) {
       alert(`✅ Bet placed! New balance: ${result.newBalance}`);
-      // Optional: update frontend balance or reset bet
       setBets((prev) => {
         const copy = { ...prev };
         delete copy[fixtureIndex];
         return copy;
       });
-
       window.location.href = "/profile";
     } else {
       alert(`❌ Failed to place bet: ${result.message}`);
@@ -173,125 +173,132 @@ export default function Fixtures() {
       </div>
 
       <div className={styles.fixtures}>
-        {fixtures.map((item, index) => (
-          <Fragment key={index}>
-            <div className={styles.fixture}>
-              <div className={styles.teamInitials + " justify-end"}>
-                <div className={styles.teamLogo}>
-                  <Image
-                    fill
-                    objectFit="contain"
-                    alt="team logo"
-                    src={item.hosT.imageSrc}
-                  />
+        {fixtures.map((item, index) => {
+          const host = item.host;
+          const guest = item.guest;
+
+          if (!host || !guest) return null; // defensive: prevent crash
+
+          const isPlayed =
+            typeof host.score === "number" && typeof guest.score === "number";
+
+          return (
+            <Fragment key={index}>
+              <div className={styles.fixture}>
+                <div className={styles.teamInitials + " justify-end"}>
+                  <div className={styles.teamLogo}>
+                    <Image
+                      fill
+                      objectFit="contain"
+                      alt="team logo"
+                      src={host.imageSrc}
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <p className={styles.teamName + " text-font"}>
+                      {host.teamName}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <p className={styles.teamName + " text-font"}>
-                    {item.hosT.teamName}
+
+                {isPlayed ? (
+                  <p className={styles.result}>
+                    {host.score} : {guest.score}
                   </p>
-                  <p className={styles.teamPosition + " text-font"}>2nd</p>
+                ) : (
+                  <button
+                    className={styles.betButton + " text-font"}
+                    onClick={() => toggleFixture(index)}
+                  >
+                    {openFixtures.includes(index) ? "Close" : "BET"}
+                  </button>
+                )}
+
+                <div className={styles.teamInitials + " justify-start"}>
+                  <div className="flex flex-col items-end">
+                    <p className={styles.teamName + " text-font"}>
+                      {guest.teamName}
+                    </p>
+                  </div>
+                  <div className={styles.teamLogo}>
+                    <Image
+                      fill
+                      objectFit="contain"
+                      alt="team logo"
+                      src={guest.imageSrc}
+                    />
+                  </div>
                 </div>
               </div>
 
-              {week < currentWeek ? (
-                <p className={styles.result}>{item.result}</p>
-              ) : (
-                <button
-                  className={styles.betButton + " text-font"}
-                  onClick={() => toggleFixture(index)}
-                >
-                  {openFixtures.includes(index) ? "Close" : "BET"}
-                </button>
+              {!isPlayed && openFixtures.includes(index) && (
+                <div className={styles.betWindow + " text-font"}>
+                  <div
+                    className={
+                      styles.betOption +
+                      (bets[index]?.option === "host"
+                        ? " " + styles.selected
+                        : "")
+                    }
+                    onClick={() =>
+                      handleOptionSelect(index, "host", host.winCoefficient)
+                    }
+                  >
+                    {`${host.teamName} win (${host.winCoefficient}x)`}
+                  </div>
+                  <div
+                    className={
+                      styles.betOption +
+                      (bets[index]?.option === "draw"
+                        ? " " + styles.selected
+                        : "")
+                    }
+                    onClick={() =>
+                      handleOptionSelect(index, "draw", item.drawCoefficient)
+                    }
+                  >
+                    {`Draw (${item.drawCoefficient}x)`}
+                  </div>
+                  <div
+                    className={
+                      styles.betOption +
+                      (bets[index]?.option === "guest"
+                        ? " " + styles.selected
+                        : "")
+                    }
+                    onClick={() =>
+                      handleOptionSelect(index, "guest", guest.winCoefficient)
+                    }
+                  >
+                    {`${guest.teamName} win (${guest.winCoefficient}x)`}
+                  </div>
+                  <input
+                    placeholder="0"
+                    type="number"
+                    className={styles.betValue}
+                    value={bets[index]?.amount || ""}
+                    onChange={(e) =>
+                      handleAmountChange(index, parseFloat(e.target.value) || 0)
+                    }
+                  />
+                  <div className={styles.amount}>
+                    +
+                    {(bets[index]?.amount && bets[index]?.multiplier
+                      ? bets[index].amount * bets[index].multiplier
+                      : 0
+                    ).toFixed(2)}
+                  </div>
+                  <button
+                    className={styles.submitBetBtn + " text-font"}
+                    onClick={() => placeBet(index, item)}
+                  >
+                    Submit
+                  </button>
+                </div>
               )}
-
-              <div className={styles.teamInitials + " justify-start"}>
-                <div className="flex flex-col items-end">
-                  <p className={styles.teamName + " text-font"}>
-                    {item.guest.teamName}
-                  </p>
-                  <p className={styles.teamPosition + " text-font"}>2nd</p>
-                </div>
-                <div className={styles.teamLogo}>
-                  <Image
-                    fill
-                    objectFit="contain"
-                    alt="team logo"
-                    src={item.guest.imageSrc}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {week >= currentWeek && openFixtures.includes(index) && (
-              <div className={styles.betWindow + " text-font"}>
-                <div
-                  className={
-                    styles.betOption +
-                    (bets[index]?.option === "host"
-                      ? " " + styles.selected
-                      : "")
-                  }
-                  onClick={() =>
-                    handleOptionSelect(index, "host", item.hosT.winCoefficient)
-                  }
-                >
-                  {`${item.hosT.teamName} win (${item.hosT.winCoefficient}x)`}
-                </div>
-                <div
-                  className={
-                    styles.betOption +
-                    (bets[index]?.option === "draw"
-                      ? " " + styles.selected
-                      : "")
-                  }
-                  onClick={() =>
-                    handleOptionSelect(index, "draw", item.drawCoefficient)
-                  }
-                >
-                  {`Draw (${item.drawCoefficient}x)`}
-                </div>
-                <div
-                  className={
-                    styles.betOption +
-                    (bets[index]?.option === "guest"
-                      ? " " + styles.selected
-                      : "")
-                  }
-                  onClick={() =>
-                    handleOptionSelect(
-                      index,
-                      "guest",
-                      item.guest.winCoefficient
-                    )
-                  }
-                >
-                  {`${item.guest.teamName} win (${item.guest.winCoefficient}x)`}
-                </div>
-                <input
-                  placeholder="0"
-                  type="number"
-                  className={styles.betValue}
-                  value={bets[index]?.amount || ""}
-                  onChange={(e) =>
-                    handleAmountChange(index, parseFloat(e.target.value) || 0)
-                  }
-                />
-                <div className={styles.amount}>
-                  +
-                  {bets[index]?.amount && bets[index]?.multiplier
-                    ? bets[index].amount * bets[index].multiplier
-                    : 0}
-                </div>
-                <button
-                  className={styles.submitBetBtn + " text-font"}
-                  onClick={() => placeBet(index, item)}
-                >
-                  Submit
-                </button>
-              </div>
-            )}
-          </Fragment>
-        ))}
+            </Fragment>
+          );
+        })}
       </div>
     </div>
   );

@@ -30,7 +30,7 @@ export async function getFixturesForFrontend() {
   const minRating = 800;
   const maxRating = 2200;
   const base = 1.2;
-  const spread = 1.5;
+  const spread = 2.0;
 
   for (const fix of fixtures) {
     const homeTeam = teamMap.get(fix.homeTeamId);
@@ -39,44 +39,37 @@ export async function getFixturesForFrontend() {
     const homeRating = homeTeam?.fifa_raiting || minRating;
     const awayRating = awayTeam?.fifa_raiting || minRating;
 
-    const homeNorm = (homeRating - minRating) / (maxRating - minRating);
-    const awayNorm = (awayRating - minRating) / (maxRating - minRating);
+    const totalRating = homeRating + awayRating || 1;
+    const homeStrength = homeRating / totalRating;
+    const awayStrength = awayRating / totalRating;
 
-    let homeCoefficient, awayCoefficient;
+    const homeCoefficient = +(base + (1 - homeStrength) * spread).toFixed(2);
+    const awayCoefficient = +(base + (1 - awayStrength) * spread).toFixed(2);
 
-    if (homeRating > awayRating) {
-      homeCoefficient = +(base + spread * (1 - homeNorm)).toFixed(2);
-      awayCoefficient = +(base + spread * awayNorm).toFixed(2);
-    } else {
-      homeCoefficient = +(base + spread * homeNorm).toFixed(2);
-      awayCoefficient = +(base + spread * (1 - awayNorm)).toFixed(2);
-    }
-
-    // Boosted Draw Coefficient: from 2.2 (close match) to 6.0 (big mismatch)
     const ratingDiff = Math.abs(homeRating - awayRating);
     const maxDiff = maxRating - minRating;
     const diffRatio = ratingDiff / maxDiff;
-
-    const drawCoefficient = +(2.2 + diffRatio * 3.8).toFixed(2);
+    const drawCoefficient = +(1.5 + diffRatio * 2.0).toFixed(2);
 
     const weekKey = `week_${fix.week}`;
     if (!groupedData[weekKey]) groupedData[weekKey] = [];
 
     groupedData[weekKey].push({
-      hosT: {
+      host: {
         id: homeTeam?.id,
         teamName: homeTeam?.name || "Unknown",
         imageSrc: homeTeam?.team_logo_url || "",
         winCoefficient: homeCoefficient,
+        score: typeof fix.homeScore === "number" ? fix.homeScore : null,
       },
       guest: {
         id: awayTeam?.id,
         teamName: awayTeam?.name || "Unknown",
         imageSrc: awayTeam?.team_logo_url || "",
         winCoefficient: awayCoefficient,
+        score: typeof fix.awayScore === "number" ? fix.awayScore : null,
       },
       drawCoefficient,
-      result: fix.result ?? "default",
     });
   }
 
