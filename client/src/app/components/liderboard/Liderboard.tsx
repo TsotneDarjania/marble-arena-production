@@ -1,71 +1,95 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./style.module.css";
+import { useAppContext } from "@/app/context/AppContexty";
+import { getLeaderboard } from "@/app/utils/supabase/actions/getLiderboard";
 
-const leaderboard = [
-  { name: "Alice", coins: 1250 },
-  { name: "Bob", coins: 1200 },
-  { name: "Charlie", coins: 1100 },
-  { name: "David", coins: 1000 },
-  { name: "Eve", coins: 950 },
-  { name: "Frank", coins: 850 },
-  { name: "Grace", coins: 800 },
-  { name: "Hannah", coins: 750 },
-  { name: "Isaac", coins: 700 },
-  { name: "Jack", coins: 680 },
-];
+type User = {
+  id: string;
+  username: string;
+  profile_image_url: string;
+  total_won: number;
+};
 
-const currentUser = {
-  rank: 34,
-  name: "Tsoten Darjania",
-  coins: 290,
+type CurrentUserData = {
+  rank: number;
+  user: User;
 };
 
 export default function Leaderboard() {
+  const { user } = useAppContext();
+  const [topUsers, setTopUsers] = useState<User[]>([]);
+  const [currentUser, setCurrentUser] = useState<CurrentUserData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (!user?.id) return;
+
+      const result = await getLeaderboard(user.id);
+      console.log(result);
+      if (!result.success) {
+        setError("Failed to load leaderboard");
+      } else {
+        setTopUsers(result.topUsers!);
+        setCurrentUser(result.currentUser!);
+      }
+    }
+
+    fetchData();
+  }, [user?.id]);
+
+  if (error) return <p>{error}</p>;
+
   return (
     <section className={styles.leaderboard}>
       <h2 className={styles.title + " title-font"}>🏆LEADERBOARD</h2>
 
       <div className={styles.list}>
-        {leaderboard.map((user, index) => (
-          <div key={user.name} className={styles.card + " text-font"}>
+        {topUsers.map((user, index) => (
+          <div key={user.id} className={styles.card + " text-font"}>
             <div className={styles.rank}>#{index + 1}</div>
             <div className={styles.userProfileImage}>
               <Image
-                alt="Marble Coin Icon"
-                src="/images/user-profile.png"
+                alt={user.username}
+                src={user.profile_image_url}
                 fill
                 style={{ objectFit: "contain" }}
               />
             </div>
-            <div className={styles.username}>{user.name}</div>
+            <div className={styles.username}>{user.username}</div>
             <div className={styles.coinBadge}>
               <div className={styles.coinImage}>
                 <Image
-                  src="/images/marble-coin.png"
+                  src="/images/ticket-done-icon.png"
                   alt="Marble Coin"
                   fill
-                  objectFit="contain"
+                  style={{ objectFit: "contain" }}
                 />
               </div>
-
-              <span>{user.coins}</span>
+              <span>{user.total_won}</span>
             </div>
           </div>
         ))}
       </div>
 
-      <div className={styles.currentUser + " text-font"}>
-        Your Rank: <strong>#{currentUser.rank}</strong> - {currentUser.name} -{" "}
-        <div className={styles.coinImage}>
-          <Image
-            src="/images/marble-coin.png"
-            alt="Marble Coin"
-            fill
-            objectFit="contain"
-          />
+      {currentUser && (
+        <div className={styles.currentUser + " text-font"}>
+          Your Rank: <strong>#{currentUser.rank}</strong> -{" "}
+          {currentUser.user.username} -{" "}
+          <div className={styles.coinImage}>
+            <Image
+              src="/images/ticket-done-icon.png"
+              alt="Marble Coin"
+              fill
+              style={{ objectFit: "contain" }}
+            />
+          </div>
+          {currentUser.user.total_won}
         </div>
-        {currentUser.coins}
-      </div>
+      )}
     </section>
   );
 }

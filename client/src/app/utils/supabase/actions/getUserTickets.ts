@@ -1,3 +1,4 @@
+// getUserTickets.ts
 "use server";
 
 import { createClient } from "@/app/utils/supabase/server";
@@ -7,7 +8,16 @@ export async function getUserTickets(userId: string) {
 
   const { data, error } = await supabase
     .from("Tickets")
-    .select("*")
+    .select(
+      `
+      option,
+      result,
+      created_at,
+      amount,
+      potential_win,
+      teams
+    `
+    )
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
