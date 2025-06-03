@@ -11,6 +11,8 @@ export async function placeBetInDatabase(betInfo: {
   teams: {
     host: string;
     guest: string;
+    hostTeamLogoUrl: string;
+    guestTeamLogoUrl: string;
   };
   coefficients: {
     host: number;
@@ -18,6 +20,7 @@ export async function placeBetInDatabase(betInfo: {
     guest: number;
   };
   result: string;
+  week: number;
 }) {
   const supabase = await createClient();
 

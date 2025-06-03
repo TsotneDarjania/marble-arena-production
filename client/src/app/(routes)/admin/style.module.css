@@ -1,60 +1,55 @@
 /* ✅ KEEP YOUR ORIGINAL STYLES */
 .adminPage {
   width: 100vw;
-
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   text-align: center;
-
   gap: 20px;
-
   padding: 50px;
 }
 
 .featureButton {
-  padding: 10px 30px;
-
+  padding: 14px 40px;
   border: 7px rgb(72, 134, 152);
   border-style: double;
   background-color: rgb(31, 65, 57);
-  font-size: 2rem;
+  font-size: 2.4rem;
   cursor: pointer;
-
   border-radius: 8px;
   color: white;
 }
 
-/* ✅ NEW CLASSES BELOW */
-
+/* ✅ UPGRADED FONT + LAYOUT */
 .weekSection {
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   background-color: #1e1e1e;
-  padding: 30px;
+  padding: 40px;
   border-radius: 12px;
-  margin-top: 40px;
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  font-size: 1.6rem;
+  gap: 25px;
+  font-size: 2rem;
 }
 
 .weekTitle {
-  font-size: 2rem;
+  font-size: 2.6rem;
   color: white;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .fixtureRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  padding: 12px;
+  gap: 30px;
+  padding: 16px;
   background-color: #2c2c2c;
-  border-radius: 10px;
+  border-radius: 12px;
   flex-wrap: wrap;
 }
 
@@ -62,39 +57,59 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   flex: 1;
-  min-width: 100px;
+  min-width: 120px;
 }
 
 .teamName {
   color: white;
-  font-size: 1.6rem;
+  font-size: 2.2rem;
   text-align: center;
 }
 
 .vsText {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
   color: white;
 }
 
-.playButton {
-  padding: 6px 16px;
+.playButton,
+.submitButton {
+  padding: 10px 24px;
   background-color: #008f7a;
   border: none;
   color: white;
   border-radius: 6px;
-  font-size: 1.6rem;
+  font-size: 2rem;
   cursor: pointer;
 }
 
-.playButton:hover {
+.playButton:hover,
+.submitButton:hover {
   background-color: #00a990;
 }
 
 .resultText {
   color: #7fff8f;
   font-weight: bold;
-  font-size: 1.6rem;
+  font-size: 2rem;
+}
+
+/* ✅ NEW INPUT STYLING FOR SCORES */
+.resultInputs {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.resultInputs input[type="number"] {
+  width: 80px;
+  font-size: 2rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #000;
+  text-align: center;
 }

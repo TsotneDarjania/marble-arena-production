@@ -36,7 +36,7 @@ export default function Standings() {
           latestLeague.standings[0]
         )
           ? (latestLeague.standings as unknown as StandingEntry[][])
-          : [latestLeague.standings as StandingEntry[]];
+          : [latestLeague.standings as unknown as StandingEntry[]];
 
         setStandingsHistory(fixedStandings);
         setCurrentWeek(latestLeague.week);

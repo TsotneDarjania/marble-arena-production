@@ -13,22 +13,28 @@ import { deleteUser } from "@/app/utils/supabase/actions/deleteUser";
 export type TicketData = {
   hostTeamName: string;
   guesteamName: string;
+  hostTeamLogoUrl: string;
+  guestTeamLogoUrl: string;
   hostScore: number | null;
   guestScore: number | null;
   date: string;
   selectedOption: 0 | 1 | 2;
   isCorrectTicket: boolean;
   coinResult: number;
+  potentialWin: number;
 };
 
 type RawTicketData = {
   option: "host" | "draw" | "guest";
-  result: "host" | "draw" | "guest" | "unknown";
+  result: string; // like "1-2" or "unknown"
   created_at: string;
+  amount: number;
   potential_win: number;
   teams: {
     host: string;
     guest: string;
+    hostTeamLogoUrl: string;
+    guestTeamLogoUrl: string;
   };
 };
 
@@ -36,8 +42,6 @@ const TICKETS_PER_PAGE = 6;
 
 export default function ProfilePage() {
   const { user } = useAppContext();
-
-  // ✅ HOOKS must be declared unconditionally at the top
   const [page, setPage] = useState(1);
   const [tickets, setTickets] = useState<TicketData[]>([]);
   const [clickedLogOut, setClickedLogOut] = useState(false);
@@ -59,32 +63,28 @@ export default function ProfilePage() {
             const option =
               ticket.option === "host" ? 0 : ticket.option === "draw" ? 1 : 2;
 
-            const isCorrect =
-              ticket.result === "unknown"
-                ? false
-                : (ticket.result === "host" && option === 0) ||
-                  (ticket.result === "draw" && option === 1) ||
-                  (ticket.result === "guest" && option === 2);
+            let hostScore: number | null = null;
+            let guestScore: number | null = null;
+            let isCorrect = false;
+
+            if (ticket.result && ticket.result.includes("-")) {
+              const [hostStr, guestStr] = ticket.result.split("-");
+              hostScore = Number(hostStr);
+              guestScore = Number(guestStr);
+
+              const actual =
+                hostScore > guestScore ? 0 : guestScore > hostScore ? 2 : 1;
+
+              isCorrect = option === actual;
+            }
 
             return {
               hostTeamName: ticket.teams.host,
               guesteamName: ticket.teams.guest,
-              hostScore:
-                ticket.result === "unknown"
-                  ? null
-                  : ticket.result === "host"
-                  ? 2
-                  : ticket.result === "guest"
-                  ? 1
-                  : 1,
-              guestScore:
-                ticket.result === "unknown"
-                  ? null
-                  : ticket.result === "guest"
-                  ? 2
-                  : ticket.result === "host"
-                  ? 0
-                  : 1,
+              hostTeamLogoUrl: ticket.teams.hostTeamLogoUrl,
+              guestTeamLogoUrl: ticket.teams.guestTeamLogoUrl,
+              hostScore,
+              guestScore,
               date: new Date(ticket.created_at).toLocaleDateString("en-US", {
                 month: "short",
                 day: "numeric",
@@ -92,7 +92,8 @@ export default function ProfilePage() {
               }),
               selectedOption: option,
               isCorrectTicket: isCorrect,
-              coinResult: isCorrect ? ticket.potential_win : 0,
+              coinResult: isCorrect ? ticket.potential_win : -ticket.amount,
+              potentialWin: ticket.potential_win,
             };
           }
         );
@@ -118,7 +119,6 @@ export default function ProfilePage() {
     });
 
     const result = await res.json();
-
     if (result.success) {
       alert("Username updated!");
       window.location.reload();

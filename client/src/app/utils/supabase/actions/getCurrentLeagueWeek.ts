@@ -40,7 +40,11 @@ export async function getCurrentLeagueWeek(): Promise<{
   for (const week of sortedWeeks) {
     const fixturesOfWeek = weekMap.get(week);
 
-    const hasUnplayed = fixturesOfWeek!.some((fix) => !fix.result);
+    const hasUnplayed = fixturesOfWeek!.some(
+      (fix) =>
+        typeof fix.homeScore !== "number" || typeof fix.awayScore !== "number"
+    );
+
     if (hasUnplayed) {
       return {
         success: true,
@@ -49,10 +53,10 @@ export async function getCurrentLeagueWeek(): Promise<{
     }
   }
 
-  // All fixtures have results
+  // All fixtures are played
   return {
     success: true,
-    currentWeek: null,
+    currentWeek: 9,
     message: "All fixtures completed",
   };
 }

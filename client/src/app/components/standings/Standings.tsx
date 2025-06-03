@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./style.module.css";
 import { getLatestLeagueFromDatabase } from "@/app/utils/supabase/actions/getLeagueFromDatabase";
+import { getCurrentLeagueWeek } from "@/app/utils/supabase/actions/getCurrentLeagueWeek";
 
 type StandingEntry = {
   d: number;
@@ -21,23 +22,35 @@ type StandingEntry = {
 };
 
 export default function Standings() {
-  const [week1Standings, setWeek1Standings] = useState<StandingEntry[]>([]);
+  const [weekStandings, setWeekStandings] = useState<StandingEntry[]>([]);
+  const [currentWeek, setCurrentWeek] = useState<number | null>(null);
 
   useEffect(() => {
     (async () => {
-      const league = await getLatestLeagueFromDatabase();
+      const res = await getCurrentLeagueWeek();
+      console.log(res);
 
-      if (league && Array.isArray(league.standings)) {
-        const firstWeek = league.standings[0]; // week 1
-
-        if (Array.isArray(firstWeek)) {
-          setWeek1Standings(firstWeek);
-        } else {
-          console.error("Week 1 standings is not an array");
-        }
-      } else {
-        console.error("Invalid league data");
+      if (!res.success || res.currentWeek === null) {
+        console.error("Failed to get current week");
+        return;
       }
+
+      const current = res.currentWeek;
+      setCurrentWeek(current);
+
+      const league = await getLatestLeagueFromDatabase();
+      if (!league || !Array.isArray(league.standings)) {
+        console.error("Invalid league data");
+        return;
+      }
+
+      const latestWeekStandings = league.standings[current - 1];
+      if (!Array.isArray(latestWeekStandings)) {
+        console.error("Latest standings is not an array");
+        return;
+      }
+
+      setWeekStandings(latestWeekStandings);
     })();
   }, []);
 
@@ -70,7 +83,7 @@ export default function Standings() {
           </tr>
         </thead>
         <tbody>
-          {week1Standings.map((team, i) => (
+          {weekStandings.map((team, i) => (
             <tr key={team.teamId}>
               <td>{i + 1}</td>
               <td className={styles.teamCell}>

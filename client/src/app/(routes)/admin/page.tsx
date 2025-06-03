@@ -5,29 +5,30 @@ import { useRouter } from "next/navigation";
 import styles from "./style.module.css";
 import Shadow from "@/app/components/utils/shadow/Shadow";
 
-// Admin windows
 import AddTeamWindow from "@/app/components/adminComponents/addTeamWindow/AddTeamWindow";
 import EditTeamWindow from "@/app/components/adminComponents/editTeamWindow/EditTeamWindow";
 import DeleteTeamWindow from "@/app/components/adminComponents/deleteTeamWindow/DeleteTeamWindow";
 import AddPromotionTeamsWindow from "@/app/components/adminComponents/addPromotionTeamsWindow/AddPromotionTeamsWindow";
 import CreateLeagueWindow from "@/app/components/adminComponents/createLeagueWindow/CreateLeagueWindow";
+
 import { getFixturesForFrontend } from "@/app/utils/supabase/actions/getFixturesForFrontend";
+import { getCurrentLeagueWeek } from "@/app/utils/supabase/actions/getCurrentLeagueWeek";
+import { submitWeekResults } from "@/app/utils/supabase/actions/submitWeekResults";
 
 type Fixture = {
-  hosT: {
+  host?: {
     id: string;
     teamName: string;
     imageSrc: string;
     winCoefficient: number;
   };
-  guest: {
+  guest?: {
     id: string;
     teamName: string;
     imageSrc: string;
     winCoefficient: number;
   };
   drawCoefficient: number;
-  result: "0" | "1" | "2" | "default";
 };
 
 type FixturesGroupedByWeek = Record<string, Fixture[]>;
@@ -45,6 +46,11 @@ export default function AdminPage() {
   const [fixturesByWeek, setFixturesByWeek] =
     useState<FixturesGroupedByWeek | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isSubmittingResults, setIsSubmittingResults] = useState(false);
+  const [resultsInput, setResultsInput] = useState<
+    Record<string, { hostScore: string; guestScore: string }>
+  >({});
+  const [currentWeek, setCurrentWeek] = useState<number>(0);
   const router = useRouter();
 
   const openModal = (modalName: AdminModal) => setActiveModal(modalName);
@@ -60,9 +66,19 @@ export default function AdminPage() {
 
   useEffect(() => {
     (async () => {
+      const res = await getCurrentLeagueWeek();
+      if (res.success && res.currentWeek !== null) {
+        setCurrentWeek(res.currentWeek);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
       const res = await getFixturesForFrontend();
       if (res.success && res.data) {
         setFixturesByWeek(res.data);
+        console.log("Fetched Fixtures:", res.data);
       } else {
         console.error("Error fetching fixtures:", res.message);
         setFixturesByWeek(null);
@@ -70,6 +86,8 @@ export default function AdminPage() {
       setLoading(false);
     })();
   }, []);
+
+  const currentWeekFixtures = fixturesByWeek?.[`week_${currentWeek}`];
 
   return (
     <div className={styles.adminPage + " text-font"}>
@@ -90,57 +108,123 @@ export default function AdminPage() {
       {activeModal === "addPromotionTeams" && <AddPromotionTeamsWindow />}
       {activeModal === "createLeague" && <CreateLeagueWindow />}
 
-      {!loading && fixturesByWeek?.week_1 && (
+      {!loading && currentWeekFixtures && currentWeekFixtures.length > 0 && (
         <div className={styles.weekSection}>
-          <h2 className={styles.weekTitle}>Fixtures for Week 1</h2>
-          {fixturesByWeek.week_1.map((fixture, index) => (
-            <div key={index} className={styles.fixtureRow}>
-              <div className={styles.teamColumn}>
-                <img
-                  src={fixture.hosT.imageSrc}
-                  alt={fixture.hosT.teamName}
-                  width={50}
-                  height={50}
-                />
-                <span className={styles.teamName}>{fixture.hosT.teamName}</span>
+          <h2 className={styles.weekTitle}>Fixtures for Week {currentWeek}</h2>
+          {currentWeekFixtures.map((fixture, index) => {
+            if (!fixture.host || !fixture.guest) return null;
+
+            const fixtureKey = `${fixture.host.id}_${fixture.guest.id}`;
+            const input = resultsInput[fixtureKey] || {
+              hostScore: "",
+              guestScore: "",
+            };
+
+            return (
+              <div key={index} className={styles.fixtureRow}>
+                <div className={styles.teamColumn}>
+                  <img
+                    src={fixture.host.imageSrc}
+                    alt={fixture.host.teamName}
+                    width={50}
+                    height={50}
+                  />
+                  <span className={styles.teamName}>
+                    {fixture.host.teamName}
+                  </span>
+                </div>
+
+                <span className={styles.vsText}>vs</span>
+
+                <div className={styles.teamColumn}>
+                  <img
+                    src={fixture.guest.imageSrc}
+                    alt={fixture.guest.teamName}
+                    width={50}
+                    height={50}
+                  />
+                  <span className={styles.teamName}>
+                    {fixture.guest.teamName}
+                  </span>
+                </div>
+
+                {isSubmittingResults ? (
+                  <div className={styles.resultInputs}>
+                    <input
+                      type="number"
+                      placeholder="Host Score"
+                      value={input.hostScore}
+                      onChange={(e) =>
+                        setResultsInput((prev) => ({
+                          ...prev,
+                          [fixtureKey]: {
+                            hostScore: e.target.value,
+                            guestScore: input.guestScore,
+                          },
+                        }))
+                      }
+                    />
+                    <input
+                      type="number"
+                      placeholder="Guest Score"
+                      value={input.guestScore}
+                      onChange={(e) =>
+                        setResultsInput((prev) => ({
+                          ...prev,
+                          [fixtureKey]: {
+                            hostScore: input.hostScore,
+                            guestScore: e.target.value,
+                          },
+                        }))
+                      }
+                    />
+                  </div>
+                ) : (
+                  <button
+                    className={styles.playButton}
+                    onClick={() =>
+                      router.push(
+                        `/game?host=${fixture.host!.id}&guest=${
+                          fixture.guest!.id
+                        }`
+                      )
+                    }
+                  >
+                    Play
+                  </button>
+                )}
               </div>
-
-              <span className={styles.vsText}>vs</span>
-
-              <div className={styles.teamColumn}>
-                <img
-                  src={fixture.guest.imageSrc}
-                  alt={fixture.guest.teamName}
-                  width={50}
-                  height={50}
-                />
-                <span className={styles.teamName}>
-                  {fixture.guest.teamName}
-                </span>
-              </div>
-
-              {fixture.result === "default" ? (
-                <button
-                  className={styles.playButton}
-                  onClick={() =>
-                    router.push(
-                      `/game?host=${fixture.hosT.id}&guest=${fixture.guest.id}`
-                    )
-                  }
-                >
-                  Play
-                </button>
-              ) : (
-                <span className={styles.resultText}>
-                  Result: {fixture.result}
-                </span>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
-      <button className={styles.featureButton}>Move To Next Week</button>
+      {!isSubmittingResults ? (
+        <button
+          className={styles.featureButton}
+          onClick={() => setIsSubmittingResults(true)}
+        >
+          Move To Next Week
+        </button>
+      ) : (
+        <button
+          className={styles.submitButton}
+          onClick={async () => {
+            const result = await submitWeekResults({
+              week: currentWeek,
+              results: resultsInput,
+            });
+
+            if (result.success) {
+              window.location.reload();
+            } else {
+              alert("Failed to update results");
+            }
+          }}
+        >
+          Submit Results
+        </button>
+      )}
     </div>
   );
 }

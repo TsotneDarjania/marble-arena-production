@@ -4,6 +4,8 @@ import styles from "./style.module.css";
 type TicketProps = {
   hostTeamName: string;
   guesteamName: string;
+  hostTeamLogoUrl: string;
+  guestTeamLogoUrl: string;
   hostScore: number | null;
   guestScore: number | null;
   date: string;
@@ -21,9 +23,10 @@ export default function Ticket({
   selectedOption,
   isCorrectTicket,
   coinResult,
+  hostTeamLogoUrl,
+  guestTeamLogoUrl,
 }: TicketProps) {
   const betOptions = [`${hostTeamName} Win`, "Draw", `${guesteamName} Win`];
-
   // ✅ Match is active if there's no score yet
   const isMatchActive = hostScore === null || guestScore === null;
 
@@ -38,7 +41,7 @@ export default function Ticket({
               fill
               objectFit="contain"
               alt="team logo"
-              src={`/images/teams/roma.png`}
+              src={hostTeamLogoUrl}
             />
           </div>
           <p>{hostTeamName}</p>
@@ -57,7 +60,7 @@ export default function Ticket({
               fill
               objectFit="contain"
               alt="team logo"
-              src={`/images/teams/inter.png`}
+              src={guestTeamLogoUrl}
             />
           </div>
         </div>
@@ -67,7 +70,7 @@ export default function Ticket({
         ) : isCorrectTicket ? (
           <p className={styles.correctResult}>+{coinResult}</p>
         ) : (
-          <p className={styles.wrongResult}>-{coinResult}</p>
+          <p className={styles.wrongResult}>{coinResult}</p>
         )}
       </div>
 
