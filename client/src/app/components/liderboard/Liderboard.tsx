@@ -50,16 +50,19 @@ export default function Leaderboard() {
       <div className={styles.list}>
         {topUsers.map((user, index) => (
           <div key={user.id} className={styles.card + " text-font"}>
-            <div className={styles.rank}>#{index + 1}</div>
-            <div className={styles.userProfileImage}>
-              <Image
-                alt={user.username}
-                src={user.profile_image_url}
-                fill
-                style={{ objectFit: "contain" }}
-              />
+            <div className="flex gap-2">
+              <div className={styles.rank}>#{index + 1}</div>
+              <div className={styles.userProfileImage}>
+                <Image
+                  alt={user.username}
+                  src={user.profile_image_url}
+                  fill
+                  style={{ objectFit: "contain" }}
+                />
+              </div>
+              <div className={styles.username}>{user.username}</div>
             </div>
-            <div className={styles.username}>{user.username}</div>
+
             <div className={styles.coinBadge}>
               <div className={styles.coinImage}>
                 <Image

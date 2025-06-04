@@ -24,10 +24,19 @@ export default function Fixtures() {
   const [bets, setBets] = useState<{
     [fixtureIndex: number]: {
       option: "host" | "draw" | "guest" | null;
-      amount: number;
-      multiplier: number;
+      amount: number | null;
+      multiplier: number | null;
     };
   }>({});
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const toggleFixture = (index: number) => {
     setOpenFixtures((prev) =>
@@ -44,7 +53,7 @@ export default function Fixtures() {
       ...prev,
       [index]: {
         option,
-        amount: prev[index]?.amount || 0,
+        amount: prev[index]?.amount ?? null,
         multiplier,
       },
     }));
@@ -62,8 +71,9 @@ export default function Fixtures() {
 
   const placeBet = async (fixtureIndex: number, fixture: any) => {
     const bet = bets[fixtureIndex];
+    console.log("Placing bet:", bet);
 
-    if (!bet || !bet.option || bet.amount <= 0) {
+    if (!bet || !bet.option || !bet.amount || bet.amount <= 0) {
       alert("Please select an option and enter a valid bet amount.");
       return;
     }
@@ -72,8 +82,8 @@ export default function Fixtures() {
       user_id: user!.id,
       option: bet.option,
       amount: bet.amount,
-      multiplier: bet.multiplier,
-      potential_win: +(bet.amount * bet.multiplier).toFixed(2),
+      multiplier: bet.multiplier!,
+      potential_win: +(bet.amount * bet.multiplier!).toFixed(2),
       teams: {
         host: fixture.host.teamName,
         guest: fixture.guest.teamName,
@@ -176,11 +186,17 @@ export default function Fixtures() {
         {fixtures.map((item, index) => {
           const host = item.host;
           const guest = item.guest;
-
-          if (!host || !guest) return null; // defensive: prevent crash
+          if (!host || !guest) return null;
 
           const isPlayed =
             typeof host.score === "number" && typeof guest.score === "number";
+
+          const bet = bets[index];
+          const potentialWin =
+            typeof bet?.amount === "number" &&
+            typeof bet?.multiplier === "number"
+              ? (bet.amount * bet.multiplier).toFixed(2)
+              : "0.00";
 
           return (
             <Fragment key={index}>
@@ -196,7 +212,7 @@ export default function Fixtures() {
                   </div>
                   <div className="flex flex-col">
                     <p className={styles.teamName + " text-font"}>
-                      {host.teamName}
+                      {isMobile ? host.teamName.slice(0, 3) : host.teamName}
                     </p>
                   </div>
                 </div>
@@ -217,7 +233,7 @@ export default function Fixtures() {
                 <div className={styles.teamInitials + " justify-start"}>
                   <div className="flex flex-col items-end">
                     <p className={styles.teamName + " text-font"}>
-                      {guest.teamName}
+                      {isMobile ? guest.teamName.slice(0, 3) : guest.teamName}
                     </p>
                   </div>
                   <div className={styles.teamLogo}>
@@ -236,9 +252,7 @@ export default function Fixtures() {
                   <div
                     className={
                       styles.betOption +
-                      (bets[index]?.option === "host"
-                        ? " " + styles.selected
-                        : "")
+                      (bet?.option === "host" ? " " + styles.selected : "")
                     }
                     onClick={() =>
                       handleOptionSelect(index, "host", host.winCoefficient)
@@ -249,9 +263,7 @@ export default function Fixtures() {
                   <div
                     className={
                       styles.betOption +
-                      (bets[index]?.option === "draw"
-                        ? " " + styles.selected
-                        : "")
+                      (bet?.option === "draw" ? " " + styles.selected : "")
                     }
                     onClick={() =>
                       handleOptionSelect(index, "draw", item.drawCoefficient)
@@ -262,9 +274,7 @@ export default function Fixtures() {
                   <div
                     className={
                       styles.betOption +
-                      (bets[index]?.option === "guest"
-                        ? " " + styles.selected
-                        : "")
+                      (bet?.option === "guest" ? " " + styles.selected : "")
                     }
                     onClick={() =>
                       handleOptionSelect(index, "guest", guest.winCoefficient)
@@ -276,18 +286,12 @@ export default function Fixtures() {
                     placeholder="0"
                     type="number"
                     className={styles.betValue}
-                    value={bets[index]?.amount || ""}
+                    value={bet?.amount ?? ""}
                     onChange={(e) =>
                       handleAmountChange(index, parseFloat(e.target.value) || 0)
                     }
                   />
-                  <div className={styles.amount}>
-                    +
-                    {(bets[index]?.amount && bets[index]?.multiplier
-                      ? bets[index].amount * bets[index].multiplier
-                      : 0
-                    ).toFixed(2)}
-                  </div>
+                  <div className={styles.amount}>+{potentialWin}</div>
                   <button
                     className={styles.submitBetBtn + " text-font"}
                     onClick={() => placeBet(index, item)}

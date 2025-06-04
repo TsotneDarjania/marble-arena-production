@@ -1,9 +1,7 @@
 .standings {
   width: 100vw;
-  max-width: 1800px;
   margin: 0 auto;
   padding: 40px 20px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,8 +21,63 @@
   margin-bottom: 20px;
 }
 
+/* Week Navigation */
+.weekNav {
+  width: 100%;
+  max-width: 1260px;
+  margin-bottom: 20px;
+}
+
+.weekTitle {
+  color: rgb(150, 226, 182);
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.weekButtons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.buttonWrapper {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.buttonWrapper.right {
+  justify-content: flex-end;
+}
+
+.prevBtn,
+.nextBtn {
+  color: rgb(255, 121, 11);
+  font-size: 2rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color 0.2s;
+}
+
+.prevBtn:hover,
+.nextBtn:hover {
+  color: white;
+}
+
+/* Table layout */
+.tableWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+
 .table {
   width: 100%;
+  min-width: 800px;
   max-width: 1260px;
   border-collapse: collapse;
   background-color: #01332c;
@@ -41,7 +94,6 @@
 
 .table th {
   background-color: #024237;
-
   font-size: 2rem;
 }
 
@@ -60,45 +112,102 @@
   justify-content: start;
 }
 
-.weekTitle {
-  color: rgb(150, 226, 182);
-  font-size: 2rem;
-
-  position: absolute;
-  margin: auto;
-
-  left: 0;
-  text-align: center;
-  right: 0;
-
-  pointer-events: none;
+.teamName {
+  display: inline-block;
 }
 
-.weekNav {
-  max-width: 1260px;
-  width: 100%;
+/* MOBILE */
+@media (max-width: 768px) {
+  .leagueLogo {
+    width: 140px;
+    height: 140px;
+  }
 
-  height: 70px;
+  .title {
+    font-size: 1.7rem;
+    margin-bottom: 16px;
+  }
 
-  position: relative;
+  .table {
+    font-size: 1.4rem;
+    min-width: unset;
+  }
+
+  .table th {
+    font-size: 1.4rem;
+    padding: 8px;
+  }
+
+  .table td {
+    font-size: 1.3rem;
+    padding: 8px;
+  }
+
+  .teamCell {
+    gap: 6px;
+  }
+
+  .teamName {
+    width: 3ch;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .table img {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .weekTitle {
+    font-size: 1.6rem;
+  }
+
+  .prevBtn,
+  .nextBtn {
+    font-size: 1.6rem;
+  }
+
+  .weekButtons {
+    gap: 12px;
+  }
 }
 
-.prevBtn {
-  color: rgb(255, 121, 11);
-  font-size: 2.5rem;
+@media (max-width: 480px) {
+  .leagueLogo {
+    width: 100px;
+    height: 100px;
+  }
 
-  position: absolute;
-  left: 0px;
-  top: 0;
-  cursor: pointer;
-}
+  .title {
+    font-size: 1.5rem;
+  }
 
-.nextBtn {
-  color: rgb(255, 121, 11);
-  font-size: 2.5rem;
+  .table th {
+    font-size: 1.2rem;
+    padding: 6px;
+  }
 
-  position: absolute;
-  right: 0px;
-  top: 0;
-  cursor: pointer;
+  .table td {
+    font-size: 1.1rem;
+    padding: 6px;
+  }
+
+  .teamCell {
+    gap: 4px;
+  }
+
+  .teamName {
+    width: 3ch;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .weekTitle {
+    font-size: 1.4rem;
+  }
+
+  .prevBtn,
+  .nextBtn {
+    font-size: 1.4rem;
+  }
 }

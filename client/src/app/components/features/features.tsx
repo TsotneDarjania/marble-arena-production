@@ -14,8 +14,9 @@ const features = [
   },
   {
     icon: "/images/stats.png",
-    title: "Live Rankings Updates",
-    description: "Track team standing with updates during matches",
+    title: "Vote with Marble Coins",
+    description:
+      "Use your Marble Coins to support your favorite teams. The most-voted teams get promoted to the main league!",
   },
 ];
 

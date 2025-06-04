@@ -3,8 +3,8 @@
   padding: 40px 20px;
   text-align: center;
   color: #ffffff;
-
   width: 100vw;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,8 +21,8 @@
 .icons {
   display: flex;
   justify-content: center;
-  gap: 70px;
   flex-wrap: wrap;
+  gap: 50px;
   margin-bottom: 30px;
 }
 
@@ -40,30 +40,39 @@
   opacity: 0.7;
 }
 
-.meta {
-  font-size: 1.3rem;
-  color: #ccc;
-}
-
-.links {
-  margin-top: 8px;
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-}
-
-.links a {
-  color: #9ff96a;
-  text-decoration: none;
-}
-
-.links a:hover {
-  text-decoration: underline;
-}
-
 .image {
   width: 90px;
   height: 90px;
-
   position: relative;
+  margin-bottom: 10px;
+}
+
+.meta {
+  font-size: 1.3rem;
+  color: #ccc;
+  text-align: center;
+}
+
+/* Optional: smaller icon spacing and text for smaller screens */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .icon {
+    font-size: 1.3rem;
+  }
+
+  .image {
+    width: 70px;
+    height: 70px;
+  }
+
+  .icons {
+    gap: 30px;
+  }
+
+  .meta {
+    font-size: 1.1rem;
+  }
 }

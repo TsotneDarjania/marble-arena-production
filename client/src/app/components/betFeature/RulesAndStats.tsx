@@ -16,17 +16,16 @@ export default function BettingFeature() {
       <div className={styles.content}>
         <ul className={styles.checkpoints}>
           {checkpoints.map((item, i) => (
-            <li className=" text-font" key={i}>
+            <li className={styles.checkpointItem + " text-font"} key={i}>
               <div className={styles.iconWrapper}>
                 <Image
-                  src="/images/feature-logo.png" // Add this to public/icons
+                  src="/images/feature-logo.png"
                   alt="Checkpoint Icon"
-                  width={60}
-                  height={60}
+                  fill
+                  style={{ objectFit: "contain" }}
                 />
               </div>
-
-              {item}
+              <span>{item}</span>
             </li>
           ))}
         </ul>

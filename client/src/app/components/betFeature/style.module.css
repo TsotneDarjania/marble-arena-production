@@ -5,17 +5,16 @@
   text-align: center;
 
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
   align-items: center;
+  background-color: #002c24;
 }
 
 .content {
   display: flex;
   justify-content: center;
   flex-direction: column;
-
-  width: 100vw;
+  width: 100%;
   max-width: 1800px;
 }
 
@@ -28,24 +27,48 @@
 
 .checkpoints {
   list-style: none;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   padding: 0;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.checkpoints li {
-  font-size: 1.6rem;
-  margin-bottom: 20px;
+.checkpointItem {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+  font-size: 1.8rem;
+  line-height: 1.4;
 }
 
-.bullet {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  background-color: #f8b400;
-  border-radius: 50%;
+/* Wrapper ensures consistent icon size */
+.iconWrapper {
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+  min-height: 60px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Optional: shrink for smaller screens */
+@media (max-width: 600px) {
+  .heading {
+    font-size: 2rem;
+  }
+
+  .checkpointItem {
+    font-size: 1.5rem;
+    gap: 12px;
+  }
+
+  .iconWrapper {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    min-height: 45px;
+  }
 }

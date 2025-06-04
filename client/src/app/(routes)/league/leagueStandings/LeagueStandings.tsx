@@ -25,7 +25,7 @@ export default function Standings() {
     []
   );
   const [currentWeek, setCurrentWeek] = useState(1);
-  const [maxWeek, setMaxWeek] = useState(0); // last played week from backend
+  const [maxWeek, setMaxWeek] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -54,72 +54,82 @@ export default function Standings() {
           alt="League Logo"
           src="/images/marble-league-logo.png"
           fill
-          objectFit="contain"
+          style={{ objectFit: "contain" }}
         />
       </div>
 
       <h2 className={styles.title + " title-font"}>LEAGUE STANDINGS</h2>
 
-      <div className={styles.weekNav + " text-font"}>
-        {currentWeek > 1 && (
-          <button
-            className={styles.prevBtn}
-            onClick={() => setCurrentWeek(currentWeek - 1)}
-          >
-            ← Previous
-          </button>
-        )}
+      <div className={styles.weekNav}>
         <h3 className={styles.weekTitle + " title-font"}>Week {currentWeek}</h3>
-        {currentWeek < maxWeek && (
-          <button
-            className={styles.nextBtn}
-            onClick={() => setCurrentWeek(currentWeek + 1)}
-          >
-            Next →
-          </button>
-        )}
+        <div className={styles.weekButtons}>
+          <div className={styles.buttonWrapper}>
+            {currentWeek > 1 && (
+              <button
+                className={styles.prevBtn}
+                onClick={() => setCurrentWeek(currentWeek - 1)}
+              >
+                ← Previous
+              </button>
+            )}
+          </div>
+          <div className={styles.buttonWrapper + " " + styles.right}>
+            {currentWeek < maxWeek && (
+              <button
+                className={styles.nextBtn}
+                onClick={() => setCurrentWeek(currentWeek + 1)}
+              >
+                Next →
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
-      <table className={styles.table + " text-font"}>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Team</th>
-            <th>P</th>
-            <th>W</th>
-            <th>D</th>
-            <th>L</th>
-            <th>GF</th>
-            <th>GA</th>
-            <th>GD</th>
-            <th>PTS</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentStandings.map((team, i) => (
-            <tr key={team.teamId}>
-              <td>{i + 1}</td>
-              <td className={styles.teamCell}>
-                <Image
-                  src={team.teamLogoUrl}
-                  alt={team.teamName}
-                  width={30}
-                  height={30}
-                />
-                <span>{team.teamName}</span>
-              </td>
-              <td>{team.p}</td>
-              <td>{team.w}</td>
-              <td>{team.d}</td>
-              <td>{team.i}</td>
-              <td>{team.gf}</td>
-              <td>{team.ga}</td>
-              <td>{team.gd}</td>
-              <td>{team.pts}</td>
+      <div className={styles.tableWrapper}>
+        <table className={styles.table + " text-font"}>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Team</th>
+              <th>P</th>
+              <th>W</th>
+              <th>D</th>
+              <th>L</th>
+              <th>GF</th>
+              <th>GA</th>
+              <th>GD</th>
+              <th>PTS</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentStandings.map((team, i) => (
+              <tr key={team.teamId}>
+                <td>{i + 1}</td>
+                <td className={styles.teamCell}>
+                  <Image
+                    src={team.teamLogoUrl}
+                    alt={team.teamName}
+                    width={30}
+                    height={30}
+                  />
+                  <span className={styles.teamName} title={team.teamName}>
+                    {team.teamName}
+                  </span>
+                </td>
+                <td>{team.p}</td>
+                <td>{team.w}</td>
+                <td>{team.d}</td>
+                <td>{team.i}</td>
+                <td>{team.gf}</td>
+                <td>{team.ga}</td>
+                <td>{team.gd}</td>
+                <td>{team.pts}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

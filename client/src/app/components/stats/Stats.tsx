@@ -1,7 +1,26 @@
-import styles from "./style.module.css";
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import styles from "./style.module.css";
+import { getTotalUsers } from "@/app/utils/supabase/actions/getTotalUsers";
 
 export default function Stats() {
+  const [userCount, setUserCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    async function fetchUserCount() {
+      const result = await getTotalUsers();
+      if (result.success) {
+        setUserCount(result.count);
+      } else {
+        console.error("Failed to fetch user count:", result.message);
+      }
+    }
+
+    fetchUserCount();
+  }, []);
+
   return (
     <section className={styles.statsSection}>
       <div className={styles.content}>
@@ -9,12 +28,12 @@ export default function Stats() {
 
         <div className={styles.statsGrid}>
           <div className={styles.statItem + " text-font"}>
-            <div className={styles.youtubeLogo}>
+            <div className={styles.iconWrapper}>
               <Image
-                src="/images/youtube.png" // Place in public/icons/
+                src="/images/youtube.png"
                 alt="YouTube"
                 fill
-                objectFit="contain"
+                style={{ objectFit: "contain" }}
               />
             </div>
             <div className={styles.textContent}>
@@ -24,16 +43,18 @@ export default function Stats() {
           </div>
 
           <div className={styles.statItem + " text-font"}>
-            <div className={styles.userLogo + " mt-[14px]"}>
+            <div className={styles.iconWrapper}>
               <Image
-                src="/images/user.png" // Place in public/icons/
-                alt="YouTube"
+                src="/images/user.png"
+                alt="Users"
                 fill
-                objectFit="contain"
+                style={{ objectFit: "contain" }}
               />
             </div>
-            <div>
-              <p className={styles.value}>12,000</p>
+            <div className={styles.textContent}>
+              <p className={styles.value}>
+                {userCount !== null ? userCount.toLocaleString() : "..."}
+              </p>
               <p className={styles.label}>Registered Users</p>
             </div>
           </div>

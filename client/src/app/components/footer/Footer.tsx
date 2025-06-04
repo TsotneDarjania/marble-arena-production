@@ -14,11 +14,10 @@ export default function Footer() {
               <Image
                 src="/images/youtube.png"
                 alt="YouTube"
-                objectFit="contain"
                 fill
+                style={{ objectFit: "contain" }}
               />
             </div>
-
             <span>YOUTUBE</span>
           </div>
         </Link>
@@ -29,25 +28,11 @@ export default function Footer() {
               <Image
                 src="/images/tiktok.png"
                 alt="TikTok"
-                objectFit="contain"
                 fill
+                style={{ objectFit: "contain" }}
               />
             </div>
             <span>TIKTOK</span>
-          </div>
-        </Link>
-
-        <Link href="https://instagram.com" target="_blank">
-          <div className={styles.icon}>
-            <div className={styles.image}>
-              <Image
-                src="/images/instagram.png"
-                alt="Instagram"
-                objectFit="contain"
-                fill
-              />
-            </div>
-            <span>INSTAGRAM</span>
           </div>
         </Link>
 
@@ -57,8 +42,8 @@ export default function Footer() {
               <Image
                 src="/images/facebook.png"
                 alt="Facebook"
-                objectFit="contain"
                 fill
+                style={{ objectFit: "contain" }}
               />
             </div>
             <span>FACEBOOK</span>
@@ -71,8 +56,8 @@ export default function Footer() {
               <Image
                 src="/images/gmail.png"
                 alt="Gmail"
-                objectFit="contain"
                 fill
+                style={{ objectFit: "contain" }}
               />
             </div>
             <span>GMAIL</span>

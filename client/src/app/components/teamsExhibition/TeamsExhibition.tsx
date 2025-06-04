@@ -15,8 +15,8 @@ export default function TeamsExhibition() {
       if (response.success) {
         const validLogos = response.data
           .map((team: TeamDataType) => team.team_logo_url)
-          .filter((url) => url); // remove null/undefined
-        const repeated = Array(3).fill(validLogos).flat(); // Repeat for scroll
+          .filter((url) => url);
+        const repeated = [...validLogos, ...validLogos]; // simpler and smoother than `.fill()`
         setLogos(repeated);
       } else {
         console.error("Failed to load teams:", response.message);

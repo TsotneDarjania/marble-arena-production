@@ -1,12 +1,17 @@
 .hero {
   max-width: 1800px;
   width: 100vw;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   gap: 80px;
+  padding: 40px 20px;
+  flex-wrap: wrap;
+}
+
+.heroText {
+  width: 40%;
+  min-width: 300px;
 }
 
 .title {
@@ -22,31 +27,69 @@
 
 .video {
   width: 600px;
-  /* border: 4px solid rgb(5, 109, 128);
-  box-shadow: 0 0px 9px rgb(5, 109, 128); */
+  max-width: 100%;
   margin-top: 10px;
   box-shadow: 15px 15px 0px 0px rgb(5, 33, 37);
 }
 
 .betButton {
   background: none;
-  border: 4px solid rgb(253, 195, 6);
-  border-style: dashed;
-
+  border: 4px dashed rgb(253, 195, 6);
   margin-top: 10px;
-
   cursor: pointer;
-
   color: rgb(253, 195, 6);
   font-size: 2.5rem;
-  padding-left: 35px;
-  padding-right: 35px;
-  padding-bottom: 3px;
-  padding-top: 3px;
-
+  padding: 3px 35px;
   transition: 0.3s;
 }
 
 .betButton:hover {
   background-color: rgb(6, 31, 1);
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .hero {
+    flex-direction: column;
+    gap: 40px;
+    padding: 20px;
+  }
+
+  .heroText {
+    width: 90%;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 3.2rem;
+  }
+
+  .text {
+    font-size: 1.7rem;
+    margin-top: 5px;
+  }
+
+  .betButton {
+    font-size: 2rem;
+    padding: 3px 25px;
+  }
+
+  .video {
+    width: 90%;
+  }
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .text {
+    font-size: 1.3rem;
+  }
+
+  .betButton {
+    font-size: 1.6rem;
+    padding: 2px 20px;
+  }
 }

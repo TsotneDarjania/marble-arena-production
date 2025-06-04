@@ -1,17 +1,23 @@
+"use client";
+
 import styles from "./style.module.css";
 
 export default function Hero() {
   return (
     <div className={styles.hero}>
-      <div className=" w-[40%]">
+      <div className={styles.heroText}>
         <h1 className={styles.title + " text-font"}>Marble Arena</h1>
         <p className={styles.text + " text-font"}>
-          {`Where the world's best football teams become marbles and battle it out
-          in fast-paced, action-packed simulations! Powered by real-world
-          rankings.`}
+          {`Watch the world's top football teams turn into marbles and play exciting matches!
+Fast games, big moments, real rankings.`}
         </p>
-        <button className={styles.betButton + " text-font"} type="button">
-          {" "}
+        <button
+          onClick={() => {
+            window.location.href = "/league";
+          }}
+          className={styles.betButton + " text-font"}
+          type="button"
+        >
           Place Bet
         </button>
       </div>

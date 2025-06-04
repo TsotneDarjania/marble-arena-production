@@ -1,11 +1,9 @@
 .statsSection {
   background-color: #002c24;
   color: #f5f5dc;
-  padding: 60px 20px;
+  padding: 40px 20px;
   text-align: center;
-
   width: 100vw;
-
   display: flex;
   justify-content: center;
 }
@@ -13,40 +11,31 @@
 .content {
   display: flex;
   flex-direction: column;
-
   justify-content: center;
   align-items: center;
-
   max-width: 1800px;
+  width: 100%;
 }
 
 .heading {
   font-size: 2.5rem;
   font-weight: bold;
   color: #ffffff;
-  margin-bottom: 10px;
-}
-
-.youtubeLogo {
-  width: 160px;
-  height: 160px;
-  position: relative;
-}
-.userLogo {
-  width: 130px;
-  height: 130px;
-  position: relative;
+  margin-bottom: 30px;
 }
 
 .statsGrid {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  width: 100%;
+  max-width: 900px;
 }
 
 @media (min-width: 768px) {
   .statsGrid {
-    flex-direction: row;
-    justify-content: center;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
   }
 }
 
@@ -54,14 +43,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  max-width: 100%;
+}
 
-  width: 400px;
-
-  justify-content: space-between;
+.iconWrapper {
+  width: 120px;
+  height: 120px;
+  position: relative;
 }
 
 .textContent {
-  margin-top: -25px;
+  margin-top: 14px;
 }
 
 .value {
@@ -73,5 +66,39 @@
 .label {
   font-size: 2rem;
   color: #e6e6e6;
-  margin-top: -10px;
+  margin-top: 8px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .statsSection {
+    padding: 30px 10px;
+  }
+
+  .iconWrapper {
+    width: 80px;
+    height: 80px;
+  }
+
+  .value {
+    font-size: 2.2rem;
+  }
+
+  .label {
+    font-size: 1.4rem;
+    margin-top: 4px;
+  }
+
+  .heading {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .statsGrid {
+    gap: 30px;
+  }
+
+  .textContent {
+    margin-top: 10px;
+  }
 }

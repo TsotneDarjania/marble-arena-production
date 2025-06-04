@@ -1,13 +1,19 @@
 .standings {
   width: 100vw;
-  max-width: 1800px;
+
   margin: 0 auto;
   padding: 40px 20px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #002b24;
+}
+
+.content {
+  max-width: 1800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .leagueLogo {
@@ -23,8 +29,16 @@
   margin-bottom: 20px;
 }
 
+.tableWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
 .table {
   width: 100%;
+  min-width: 800px;
   max-width: 1260px;
   border-collapse: collapse;
   background-color: #01332c;
@@ -41,7 +55,6 @@
 
 .table th {
   background-color: #024237;
-
   font-size: 2rem;
 }
 
@@ -58,4 +71,52 @@
   align-items: center;
   gap: 10px;
   justify-content: start;
+}
+
+.teamName {
+  display: inline-block;
+}
+
+/* Responsive styles for mobile */
+@media (max-width: 480px) {
+  .leagueLogo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin-top: -10px;
+  }
+
+  .table {
+    font-size: 1.2rem;
+    min-width: unset;
+    max-width: unset;
+  }
+
+  .table th {
+    font-size: 1.3rem;
+    padding: 6px;
+  }
+
+  .table td {
+    font-size: 1.2rem;
+    padding: 6px;
+  }
+
+  .teamCell {
+    gap: 6px;
+  }
+
+  .table img {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .teamName {
+    width: 3ch;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 }

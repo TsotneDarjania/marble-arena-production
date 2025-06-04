@@ -10,11 +10,11 @@ export default function League() {
     <div>
       <LeagueStandings />
       <Fixtures />
-      <MarbleLeagueWinners />
+      {/* <MarbleLeagueWinners /> */}
       <VoteSection />
 
-      <ShadowWrapper />
-      <AuthModal />
+      {/* <ShadowWrapper />
+      <AuthModal /> */}
     </div>
   );
 }

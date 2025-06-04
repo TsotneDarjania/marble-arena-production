@@ -2,42 +2,55 @@
   width: 100%;
   overflow: hidden;
   padding: 40px 0;
-  text-align: center;
-
   margin-top: 50px;
+  text-align: center;
 }
 
 .wrapper h2 {
   color: white;
-  font-size: 2rem;
+  font-size: 2.2rem;
   margin-bottom: 30px;
 }
 
 .marquee {
+  position: relative;
   width: 100%;
   overflow: hidden;
-  position: relative;
 }
 
 .track {
   display: flex;
-  width: max-content;
-  animation: scroll-left 30s linear infinite; /* slower scroll helps seamlessness */
+  width: fit-content;
+  animation: scroll-left 40s linear infinite;
 }
 
 .logo {
-  position: relative;
-  width: 140px;
+  width: 120px;
   height: 80px;
-  margin: 0 40px;
+  position: relative;
+  margin: 0 30px;
   flex-shrink: 0;
 }
 
+/* Scrolling keyframes */
 @keyframes scroll-left {
   0% {
-    transform: translateX(0%);
+    transform: translateX(0);
   }
   100% {
     transform: translateX(-50%);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .logo {
+    width: 90px;
+    height: 60px;
+    margin: 0 20px;
+  }
+
+  .wrapper h2 {
+    font-size: 1.7rem;
   }
 }

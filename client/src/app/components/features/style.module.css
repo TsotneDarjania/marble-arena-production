@@ -3,15 +3,14 @@
   padding: 60px 20px;
   text-align: center;
   color: #f0f0d8;
-
   width: 100vw;
-
   display: flex;
   justify-content: center;
 }
 
 .wrapper {
   max-width: 1800px;
+  width: 100%;
 }
 
 .heading {
@@ -26,33 +25,16 @@
   gap: 44px;
 }
 
-.coinImage {
-  width: 160px;
-  height: 160px;
-
-  position: relative;
-}
-
-@media (min-width: 768px) {
-  .cards {
-    flex-direction: row;
-    justify-content: center;
-  }
-}
-
 .card {
   background-color: #014235;
-
   padding: 34px;
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
   box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.3);
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
   transition: 0.3s;
 }
 
@@ -64,6 +46,12 @@
   margin-bottom: 16px;
 }
 
+.coinImage {
+  width: 160px;
+  height: 160px;
+  position: relative;
+}
+
 .title {
   font-size: 2rem;
   font-weight: 600;
@@ -73,4 +61,41 @@
 .description {
   font-size: 2rem;
   color: #e0e0cc;
+}
+
+/* Responsive layout for tablets and larger */
+@media (min-width: 768px) {
+  .cards {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .card {
+    margin: 0;
+  }
+}
+
+/* Responsive typography and scaling */
+@media (max-width: 600px) {
+  .heading {
+    font-size: 2rem;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .description {
+    font-size: 1.4rem;
+  }
+
+  .coinImage {
+    width: 120px;
+    height: 120px;
+  }
+
+  .card {
+    padding: 24px;
+  }
 }

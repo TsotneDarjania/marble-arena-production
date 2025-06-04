@@ -30,6 +30,12 @@ body {
   align-items: center;
 }
 
+@media (max-width: 1024px) {
+  .layout {
+    padding-top: 100px;
+  }
+}
+
 .title-font {
   font-family: "Audiowide", sans-serif;
   letter-spacing: 2px;
