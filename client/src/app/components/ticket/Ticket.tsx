@@ -27,7 +27,6 @@ export default function Ticket({
   guestTeamLogoUrl,
 }: TicketProps) {
   const betOptions = [`${hostTeamName} Win`, "Draw", `${guesteamName} Win`];
-  // ✅ Match is active if there's no score yet
   const isMatchActive = hostScore === null || guestScore === null;
 
   return (
@@ -35,33 +34,36 @@ export default function Ticket({
       <div className={styles.date + " text-font"}>{date}</div>
 
       <div className={styles.teamInitialsRow + " text-font"}>
-        <div className={styles.teamInitials}>
-          <div className={styles.teamLogo}>
-            <Image
-              fill
-              objectFit="contain"
-              alt="team logo"
-              src={hostTeamLogoUrl}
-            />
+        <div className="flex w-full justify-center gap-4 items-center">
+          <div className={styles.teamInitials}>
+            <div className={styles.teamLogo}>
+              <Image
+                fill
+                objectFit="contain"
+                alt="team logo"
+                src={hostTeamLogoUrl}
+              />
+            </div>
+            <p className={styles.teamName} data-full-name={hostTeamName}></p>
           </div>
-          <p>{hostTeamName}</p>
-        </div>
 
-        <div className={styles.scoreResult}>
-          <p>{hostScore ?? "-"}</p>
-          <p>-</p>
-          <p>{guestScore ?? "-"}</p>
-        </div>
+          <div className={styles.scoreResult}>
+            <p>{hostScore ?? "-"}</p>
+            <p>-</p>
+            <p>{guestScore ?? "-"}</p>
+          </div>
 
-        <div className={styles.teamInitials}>
-          <p>{guesteamName}</p>
-          <div className={styles.teamLogo}>
-            <Image
-              fill
-              objectFit="contain"
-              alt="team logo"
-              src={guestTeamLogoUrl}
-            />
+          <div className={styles.teamInitials}>
+            <p className={styles.teamName} data-full-name={guesteamName}></p>
+
+            <div className={styles.teamLogo}>
+              <Image
+                fill
+                objectFit="contain"
+                alt="team logo"
+                src={guestTeamLogoUrl}
+              />
+            </div>
           </div>
         </div>
 

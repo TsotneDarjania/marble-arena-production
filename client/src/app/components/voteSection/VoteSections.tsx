@@ -47,6 +47,11 @@ export default function VoteSection() {
   };
 
   const handleVote = async (teamName: string) => {
+    if (!user) {
+      alert("Please register before voting.");
+      return;
+    }
+
     const input = inputValues[teamName];
     const amount = parseInt(input);
 
@@ -103,35 +108,40 @@ export default function VoteSection() {
       <div className={styles.teamList + " title-font"}>
         {teams.map((team) => (
           <div className={styles.teamItem} key={team.team_name}>
-            <img
-              src={team.team_logo_url}
-              alt={team.team_name}
-              className={styles.logo}
-            />
-            <span className={styles.teamName}>{team.team_name}</span>
+            <div className={styles.teamInitials}>
+              <img
+                src={team.team_logo_url}
+                alt={team.team_name}
+                className={styles.logo}
+              />
+              <span className={styles.teamName}>{team.team_name}</span>
+            </div>
 
             <div className={styles.voteControls}>
-              <label
-                htmlFor={`input-${team.team_name}`}
-                className={styles.voteLabel}
-              >
-                COINS:
-              </label>
-              <input
-                type="number"
-                id={`input-${team.team_name}`}
-                min="1"
-                value={inputValues[team.team_name] || ""}
-                onChange={(e) =>
-                  handleInputChange(team.team_name, e.target.value)
-                }
-                className={styles.voteInput}
-              />
-              <img
-                src="/images/marble-coin.png"
-                alt="Marble Coin"
-                className={styles.coin}
-              />
+              <div className="flex gap-2 items-center">
+                <label
+                  htmlFor={`input-${team.team_name}`}
+                  className={styles.voteLabel}
+                >
+                  COINS:
+                </label>
+                <input
+                  type="number"
+                  id={`input-${team.team_name}`}
+                  min="1"
+                  value={inputValues[team.team_name] || ""}
+                  onChange={(e) =>
+                    handleInputChange(team.team_name, e.target.value)
+                  }
+                  className={styles.voteInput}
+                />
+                <img
+                  src="/images/marble-coin.png"
+                  alt="Marble Coin"
+                  className={styles.coin}
+                />
+              </div>
+
               <button
                 className={styles.voteButton}
                 disabled={loadingTeamName === team.team_name}

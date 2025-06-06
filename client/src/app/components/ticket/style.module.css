@@ -1,3 +1,5 @@
+/* === Desktop Base Styles === */
+
 .ticket {
   width: 900px;
   height: 225px;
@@ -51,7 +53,7 @@
 
 .betOptionItem {
   border: 2px solid rgb(107, 253, 144);
-  padding: 0px 20px 0px 20px;
+  padding: 0px 20px;
   font-size: 2rem;
   color: rgb(107, 253, 144);
 }
@@ -87,4 +89,89 @@
   right: 20px;
   color: yellow;
   font-weight: bold;
+}
+
+/* === Team Name Behavior === */
+.teamName {
+  font-size: 2rem;
+  color: transparent;
+  position: relative;
+}
+
+.teamName::before {
+  content: attr(data-full-name);
+  color: rgb(107, 253, 144);
+}
+
+@media (max-width: 1080px) {
+  .teamName {
+    font-size: 1.4rem;
+    margin-top: 10px;
+  }
+
+  .teamName::before {
+    content: attr(data-full-name);
+    display: inline-block;
+    width: 3ch;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+/* === Responsive Styles === */
+
+@media (max-width: 1024px) {
+  .ticket {
+    width: 700px;
+    height: auto;
+  }
+
+  .teamInitialsRow {
+    gap: 30px;
+    font-size: 2.2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .teamLogo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .betOptionItem {
+    font-size: 1.8rem;
+    padding: 6px 16px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .ticket {
+    width: 100%;
+    height: auto;
+  }
+
+  .teamInitialsRow {
+    gap: 16px;
+    font-size: 2rem;
+  }
+
+  .betOptions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .betOptionItem {
+    width: 100%;
+    text-align: center;
+    font-size: 1.6rem;
+  }
+
+  .correctResult,
+  .wrongResult,
+  .activeResult {
+    position: static;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 1.8rem;
+  }
 }

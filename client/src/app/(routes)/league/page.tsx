@@ -13,8 +13,8 @@ export default function League() {
       {/* <MarbleLeagueWinners /> */}
       <VoteSection />
 
-      {/* <ShadowWrapper />
-      <AuthModal /> */}
+      <ShadowWrapper />
+      <AuthModal />
     </div>
   );
 }

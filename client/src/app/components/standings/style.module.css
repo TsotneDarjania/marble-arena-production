@@ -78,7 +78,7 @@
 }
 
 /* Responsive styles for mobile */
-@media (max-width: 480px) {
+@media (max-width: 880px) {
   .leagueLogo {
     width: 100px;
     height: 100px;

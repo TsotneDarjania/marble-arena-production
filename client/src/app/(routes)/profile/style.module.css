@@ -186,3 +186,118 @@
 .net {
   color: rgb(255, 211, 14);
 }
+
+/* Existing styles remain unchanged */
+
+/* Responsive adjustments */
+
+@media (max-width: 1200px) {
+  .userInitials {
+    width: 100%;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .title {
+    width: auto;
+    text-align: center;
+  }
+
+  .content {
+    width: 80%;
+  }
+}
+
+@media (max-width: 768px) {
+  .avatar {
+    width: 180px;
+    height: 180px;
+  }
+
+  .logOutIcon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .itemLogo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .itemTitle,
+  .userSettingsTitle {
+    font-size: 2.4rem;
+  }
+
+  .title {
+    font-size: 3rem;
+  }
+
+  .content {
+    font-size: 2rem;
+  }
+
+  .betLogo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .betHistoryHead h2 {
+    font-size: 2rem;
+  }
+
+  .pagination {
+    font-size: 2rem;
+  }
+
+  .pageButton {
+    width: 50px;
+    height: 50px;
+  }
+
+  .totalResults {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .avatar {
+    width: 140px;
+    height: 140px;
+  }
+
+  .title {
+    font-size: 2.4rem;
+  }
+
+  .itemText {
+    font-size: 2.2rem;
+  }
+
+  .content {
+    width: 95%;
+    font-size: 1.8rem;
+  }
+
+  .betLogo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .pageButton {
+    width: 40px;
+    height: 40px;
+    font-size: 1.6rem;
+  }
+}
+
+/* Flex column layout for items on smaller screens */
+@media (max-width: 768px) {
+  .tickets {
+    align-items: center;
+    width: 80%;
+  }
+}

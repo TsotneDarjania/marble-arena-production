@@ -8,7 +8,10 @@ export default function Footer() {
       <h2 className={styles.title + " title-font"}>FOLLOW US</h2>
 
       <div className={styles.icons + " text-font"}>
-        <Link href="https://youtube.com" target="_blank">
+        <Link
+          href="https://www.youtube.com/channel/UCZ_Ulx3qid6zZtcCLT7CFKQ"
+          target="_blank"
+        >
           <div className={styles.icon}>
             <div className={styles.image}>
               <Image
@@ -22,7 +25,7 @@ export default function Footer() {
           </div>
         </Link>
 
-        <Link href="https://tiktok.com" target="_blank">
+        <Link href="https://www.tiktok.com/@marblearena" target="_blank">
           <div className={styles.icon}>
             <div className={styles.image}>
               <Image
@@ -36,7 +39,10 @@ export default function Footer() {
           </div>
         </Link>
 
-        <Link href="https://facebook.com" target="_blank">
+        <Link
+          href="https://www.facebook.com/profile.php?id=61557120621313"
+          target="_blank"
+        >
           <div className={styles.icon}>
             <div className={styles.image}>
               <Image
@@ -50,7 +56,7 @@ export default function Footer() {
           </div>
         </Link>
 
-        <Link href="mailto:contact@marblearena.com">
+        <Link href="mailto:marblearena10@gmail.com">
           <div className={styles.icon}>
             <div className={styles.image}>
               <Image

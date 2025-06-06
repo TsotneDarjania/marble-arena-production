@@ -246,7 +246,7 @@ export default function ProfilePage() {
           User Settings
         </h2>
 
-        {["Delete Account", "Update Username", "Update Profile Picture"].map(
+        {["Delete Account", "Update Username", "Update Avatar"].map(
           (label, i) => (
             <div
               onClick={() => {
@@ -257,7 +257,7 @@ export default function ProfilePage() {
                     handleUpdateUsername(newUsername.trim());
                   }
                 }
-                if (label === "Update Profile Picture") {
+                if (label === "Update Avatar") {
                   handleUpdateProfilePicture();
                 }
               }}
@@ -284,7 +284,7 @@ export default function ProfilePage() {
         )}
       </div>
 
-      <div>
+      <div className="flex flex-col w-full items-center">
         <div className={styles.betHistoryHead}>
           <div className={styles.betLogo + " ml-[-10px]"}>
             <Image

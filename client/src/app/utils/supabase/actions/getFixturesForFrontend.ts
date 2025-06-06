@@ -28,9 +28,11 @@ export async function getFixturesForFrontend() {
   const groupedData: Record<string, any[]> = {};
 
   const minRating = 800;
-  const maxRating = 2200;
-  const base = 1.2;
-  const spread = 2.0;
+  const maxRating = 2400;
+
+  const minCoef = 1.1;
+  const maxCoef = 20.0;
+  const curveFactor = 3.5; // HIGHER = more exaggeration
 
   for (const fix of fixtures) {
     const homeTeam = teamMap.get(fix.homeTeamId);
@@ -39,17 +41,29 @@ export async function getFixturesForFrontend() {
     const homeRating = homeTeam?.fifa_raiting || minRating;
     const awayRating = awayTeam?.fifa_raiting || minRating;
 
-    const totalRating = homeRating + awayRating || 1;
-    const homeStrength = homeRating / totalRating;
-    const awayStrength = awayRating / totalRating;
+    const total = homeRating + awayRating;
+    const homeStrength = homeRating / total;
+    const awayStrength = awayRating / total;
 
-    const homeCoefficient = +(base + (1 - homeStrength) * spread).toFixed(2);
-    const awayCoefficient = +(base + (1 - awayStrength) * spread).toFixed(2);
+    // Coefficients using exponential shaping
+    const homeCoefficient = +(
+      minCoef +
+      (maxCoef - minCoef) * Math.pow(1 - homeStrength, curveFactor)
+    ).toFixed(2);
 
+    const awayCoefficient = +(
+      minCoef +
+      (maxCoef - minCoef) * Math.pow(1 - awayStrength, curveFactor)
+    ).toFixed(2);
+
+    // Draw coefficient — based on how close the teams are
     const ratingDiff = Math.abs(homeRating - awayRating);
     const maxDiff = maxRating - minRating;
-    const diffRatio = ratingDiff / maxDiff;
-    const drawCoefficient = +(1.5 + diffRatio * 2.0).toFixed(2);
+    const drawBase = 2.5;
+    const drawCoefficient = +(
+      drawBase +
+      (1 - ratingDiff / maxDiff) * 2.0
+    ).toFixed(2); // closer teams → higher draw chance
 
     const weekKey = `week_${fix.week}`;
     if (!groupedData[weekKey]) groupedData[weekKey] = [];

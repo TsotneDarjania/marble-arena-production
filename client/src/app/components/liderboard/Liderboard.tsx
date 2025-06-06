@@ -29,7 +29,7 @@ export default function Leaderboard() {
       if (!user?.id) return;
 
       const result = await getLeaderboard(user.id);
-      console.log(result);
+
       if (!result.success) {
         setError("Failed to load leaderboard");
       } else {
@@ -42,6 +42,7 @@ export default function Leaderboard() {
   }, [user?.id]);
 
   if (error) return <p>{error}</p>;
+  if (!user) return null;
 
   return (
     <section className={styles.leaderboard}>

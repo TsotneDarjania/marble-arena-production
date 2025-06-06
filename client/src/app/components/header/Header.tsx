@@ -25,10 +25,14 @@ export default function Header() {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const handleNavItemClick = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}>
       <div className={styles.content}>
-        <Link href="/" prefetch={true}>
+        <Link href="/" prefetch={true} onClick={handleNavItemClick}>
           <div
             className={`${styles.brandLogo} ${
               scrolled ? styles.scrolledBrandLogo : ""
@@ -60,7 +64,7 @@ export default function Header() {
           className={`${styles.nav} ${isMobileMenuOpen ? styles.navOpen : ""}`}
         >
           <ul>
-            <Link href="/league" prefetch={true}>
+            <Link href="/league" prefetch={true} onClick={handleNavItemClick}>
               <li
                 className={`${styles.menuItem} ${
                   scrolled ? styles.scrolledMenuItem : ""
@@ -71,11 +75,12 @@ export default function Header() {
             </Link>
 
             <li
-              onClick={() =>
+              onClick={() => {
                 window.open(
                   "https://www.youtube.com/channel/UCZ_Ulx3qid6zZtcCLT7CFKQ/"
-                )
-              }
+                );
+                handleNavItemClick();
+              }}
               className={`${styles.menuItem} ${
                 scrolled ? styles.scrolledMenuItem : ""
               } title-font`}
@@ -85,7 +90,11 @@ export default function Header() {
 
             {isLogin ? (
               <>
-                <Link href="/profile" prefetch={true}>
+                <Link
+                  href="/profile"
+                  prefetch={true}
+                  onClick={handleNavItemClick}
+                >
                   <div className={styles.userIndicators}>
                     <div className={styles.userProfileImage}>
                       <Image
@@ -114,13 +123,14 @@ export default function Header() {
                     />
                   </div>
                   <p className={styles.coinCount + " title-font"}>
-                    {user?.coins}
+                    {user?.coins.toFixed(2)}
                   </p>
                 </div>
               </>
             ) : (
               <li
                 onClick={() => {
+                  handleNavItemClick();
                   setIsShadowOpen(true);
                   setIsAuthModalOpen(true);
                 }}

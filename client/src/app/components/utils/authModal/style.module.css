@@ -39,45 +39,37 @@
   color: #ffffff;
   font-size: 2rem;
   border-radius: 4px;
-
   margin-top: -10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.loginBtn,
+.registerBtn {
+  margin-top: 20px;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+  transition: opacity 0.3s ease;
 }
 
 .loginBtn {
-  margin-top: 20px;
-  padding: 6px;
   background-color: #f8b400;
   color: #001912;
-  font-weight: bold;
-  font-size: 2rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: inherit;
-
-  width: 100%;
-}
-
-.loginBtn:hover {
-  opacity: 0.9;
 }
 
 .registerBtn {
-  margin-top: 20px;
-  padding: 6px;
   background-color: #2ece06;
   color: #fdffff;
-  font-weight: bold;
-  font-size: 2rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: inherit;
-
-  width: 100%;
 }
 
-.loginBtn:hover {
+.loginBtn:hover,
+.registerBtn:hover {
   opacity: 0.9;
 }
 
@@ -99,12 +91,15 @@
 .registerLink {
   text-align: center;
   font-size: 2rem;
-
-  border: 3px solid rgb(255, 248, 248);
+  border: 3px solid #fff8f8;
   padding: 6px;
   border-radius: 4px;
-
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.registerLink:hover {
+  background-color: #003a2e;
 }
 
 .block {
@@ -114,7 +109,6 @@
   z-index: 10;
   width: 100%;
   height: 100%;
-
   background-color: black;
   opacity: 0.7;
 }
@@ -122,4 +116,37 @@
 .error {
   color: red;
   font-size: 1.5rem;
+}
+
+/* Responsive styles */
+@media (max-width: 500px) {
+  .modal {
+    padding: 25px 20px;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .form label {
+    font-size: 1.2rem;
+  }
+
+  .form input {
+    font-size: 1.6rem;
+  }
+
+  .loginBtn,
+  .registerBtn {
+    font-size: 1.6rem;
+    padding: 8px;
+  }
+
+  .registerLink {
+    font-size: 1.6rem;
+  }
+
+  .error {
+    font-size: 1.2rem;
+  }
 }

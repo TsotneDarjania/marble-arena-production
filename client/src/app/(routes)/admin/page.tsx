@@ -14,6 +14,7 @@ import CreateLeagueWindow from "@/app/components/adminComponents/createLeagueWin
 import { getFixturesForFrontend } from "@/app/utils/supabase/actions/getFixturesForFrontend";
 import { getCurrentLeagueWeek } from "@/app/utils/supabase/actions/getCurrentLeagueWeek";
 import { submitWeekResults } from "@/app/utils/supabase/actions/submitWeekResults";
+import { useAppContext } from "@/app/context/AppContexty";
 
 type Fixture = {
   host?: {
@@ -88,6 +89,13 @@ export default function AdminPage() {
   }, []);
 
   const currentWeekFixtures = fixturesByWeek?.[`week_${currentWeek}`];
+
+  const { user } = useAppContext();
+
+  if (user?.username !== "Admin" || !user) {
+    window.location.href = "/";
+    return null;
+  }
 
   return (
     <div className={styles.adminPage + " text-font"}>

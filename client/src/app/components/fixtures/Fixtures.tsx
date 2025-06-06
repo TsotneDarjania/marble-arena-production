@@ -39,6 +39,11 @@ export default function Fixtures() {
   }, []);
 
   const toggleFixture = (index: number) => {
+    if (!user) {
+      alert("Please register before placing a bet.");
+      return;
+    }
+
     setOpenFixtures((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
@@ -102,7 +107,7 @@ export default function Fixtures() {
     const result = await placeBetInDatabase(betInfo);
 
     if (result.success) {
-      alert(`✅ Bet placed! New balance: ${result.newBalance}`);
+      alert(`✅ Bet placed! New balance: ${result.newBalance?.toFixed(2)}`);
       setBets((prev) => {
         const copy = { ...prev };
         delete copy[fixtureIndex];
