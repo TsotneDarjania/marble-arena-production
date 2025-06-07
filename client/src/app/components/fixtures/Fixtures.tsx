@@ -145,7 +145,11 @@ export default function Fixtures() {
   }, [currentWeek]);
 
   if (currentWeek === null || week === null || !fixturesData) {
-    return <div className="text-font">Loading fixtures...</div>;
+    return (
+      <div className="text-font w-full text-center text-white mt-7">
+        Loading fixtures...
+      </div>
+    );
   }
 
   const currentWeekKey = `week_${week}`;
