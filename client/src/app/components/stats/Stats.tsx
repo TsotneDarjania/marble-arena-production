@@ -37,7 +37,7 @@ export default function Stats() {
               />
             </div>
             <div className={styles.textContent}>
-              <p className={styles.value}>100K</p>
+              <p className={styles.value}>8K</p>
               <p className={styles.label}>YouTube Subscribers</p>
             </div>
           </div>

@@ -162,15 +162,18 @@ export async function submitWeekResults({
       else if (g > h) actual = "guest";
 
       const correct = actual === option;
+
       if (!userStats.has(user_id)) {
         userStats.set(user_id, { won: 0, lost: 0, profit: 0 });
       }
+
       const stat = userStats.get(user_id)!;
+
       if (correct) {
-        stat.won++;
+        stat.won += potential_win || 0; // money won
         stat.profit += potential_win || 0;
       } else {
-        stat.lost++;
+        stat.lost += 1; // just count of failed tickets
       }
     }
 
