@@ -206,6 +206,10 @@
   .content {
     width: 80%;
   }
+
+  .betHistoryHead h2 {
+    margin-top: -20px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -274,7 +278,7 @@
   }
 
   .itemText {
-    font-size: 2.2rem;
+    font-size: 1.7rem;
   }
 
   .content {

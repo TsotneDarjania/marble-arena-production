@@ -294,7 +294,7 @@ export default function ProfilePage() {
               objectFit="contain"
             />
           </div>
-          <h2 className="text-font">Bet History</h2>
+          <h2 className={styles.betHistoryTitle + " text-font"}>Bet History</h2>
         </div>
 
         <div className={styles.tickets}>
