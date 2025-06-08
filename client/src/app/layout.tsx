@@ -1,4 +1,3 @@
-// app/layout.tsx
 import "./globals.css";
 import type { Metadata } from "next";
 import { Audiowide, Courier_Prime } from "next/font/google";
@@ -7,8 +6,8 @@ import Footer from "./components/footer/Footer";
 import { AppProvider } from "./context/AppContexty";
 import { createClient } from "./utils/supabase/server";
 import { UserType } from "./types/userTypes";
+import DailyRewardToast from "./components/dailyRewardToast/DayliRewardToast";
 
-// Load fonts and assign to CSS variables
 const audiowide = Audiowide({
   weight: "400",
   subsets: ["latin"],
@@ -39,18 +38,34 @@ export default async function RootLayout({
 
   let userData: UserType = null;
 
-  if (authError || !user) {
-    console.log("Auth error:", authError);
-  } else {
+  if (!authError && user) {
     const { data, error: userError } = await supabase
       .from("Users")
-      .select("balance, profile_image_url")
+      .select("balance, profile_image_url, last_reward_date")
       .eq("id", user.id)
       .single();
 
-    if (userError) {
-      console.log("User data fetch error:", userError);
-    } else {
+    if (!userError && data) {
+      const today = new Date().toISOString().slice(0, 10);
+      const needsReward = data.last_reward_date !== today;
+
+      if (needsReward) {
+        const { error: updateError } = await supabase
+          .from("Users")
+          .update({
+            balance: data.balance + 1,
+            last_reward_date: today,
+          })
+          .eq("id", user.id);
+
+        if (!updateError) {
+          data.balance += 1;
+          await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reward`, {
+            method: "POST",
+          });
+        }
+      }
+
       userData = {
         username: user.user_metadata.displayName,
         coins: data.balance,
@@ -69,6 +84,7 @@ export default async function RootLayout({
           <Header />
           {children}
           <Footer />
+          <DailyRewardToast />
         </AppProvider>
       </body>
     </html>
