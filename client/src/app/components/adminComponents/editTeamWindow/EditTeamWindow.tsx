@@ -5,6 +5,7 @@ import styles from "./style.module.css";
 import { TeamDataType } from "@/app/types/gameDataTypes";
 import { getTeamsFromDatabase } from "@/app/utils/supabase/actions/getTeams";
 import { updateTeamInDatabase } from "@/app/utils/supabase/actions/updateTeam";
+import Image from "next/image";
 
 type EditTeamFormData = Partial<
   Omit<TeamDataType, "team_logo_url"> & {
@@ -192,7 +193,7 @@ export default function EditTeamWindow() {
             Team Logo
             {formData.team_logo_url &&
               typeof formData.team_logo_url === "string" && (
-                <img
+                <Image
                   src={formData.team_logo_url}
                   alt="Team Logo"
                   style={{ maxWidth: "100px", marginTop: "10px" }}

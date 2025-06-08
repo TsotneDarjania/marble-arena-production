@@ -15,6 +15,7 @@ import { getFixturesForFrontend } from "@/app/utils/supabase/actions/getFixtures
 import { getCurrentLeagueWeek } from "@/app/utils/supabase/actions/getCurrentLeagueWeek";
 import { submitWeekResults } from "@/app/utils/supabase/actions/submitWeekResults";
 import { useAppContext } from "@/app/context/AppContexty";
+import Image from "next/image";
 
 type Fixture = {
   host?: {
@@ -131,7 +132,7 @@ export default function AdminPage() {
             return (
               <div key={index} className={styles.fixtureRow}>
                 <div className={styles.teamColumn}>
-                  <img
+                  <Image
                     src={fixture.host.imageSrc}
                     alt={fixture.host.teamName}
                     width={50}
@@ -145,7 +146,7 @@ export default function AdminPage() {
                 <span className={styles.vsText}>vs</span>
 
                 <div className={styles.teamColumn}>
-                  <img
+                  <Image
                     src={fixture.guest.imageSrc}
                     alt={fixture.guest.teamName}
                     width={50}

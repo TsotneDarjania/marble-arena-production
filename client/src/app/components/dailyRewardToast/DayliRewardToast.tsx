@@ -32,7 +32,7 @@ export default function DailyRewardToast() {
         zIndex: 1000,
       }}
     >
-      ✅ +1 coin for today's login!
+      ✅ +1 coin
     </div>
   );
 }

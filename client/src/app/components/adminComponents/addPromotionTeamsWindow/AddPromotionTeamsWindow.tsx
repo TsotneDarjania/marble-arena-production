@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import styles from "./style.module.css";
 import { getPromotionTeamsFromDatabase } from "@/app/utils/supabase/actions/getPromotionTeams";
 import { addPromotionTeamToDatabase } from "@/app/utils/supabase/actions/addPromotionTeam"; // you'll create this
+import Image from "next/image";
 
 export type PromotionTeamType = {
   team_name: string;
@@ -86,7 +87,7 @@ export default function AddPromotionTeamsWindow() {
         <ul className={styles.teamList}>
           {teams.map((team, index) => (
             <li key={index} className={styles.teamItem}>
-              <img
+              <Image
                 src={team.team_logo_url}
                 alt={team.team_name}
                 width={50}

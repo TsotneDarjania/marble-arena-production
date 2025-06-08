@@ -5,6 +5,7 @@ import styles from "./style.module.css";
 import { getPromotionTeamsFromDatabase } from "@/app/utils/supabase/actions/getPromotionTeams";
 import { userVoteTeam } from "@/app/utils/supabase/actions/userVoteTeam";
 import { useAppContext } from "@/app/context/AppContexty";
+import Image from "next/image";
 
 export type PromotionTeamType = {
   team_name: string;
@@ -109,7 +110,7 @@ export default function VoteSection() {
         {teams.map((team) => (
           <div className={styles.teamItem} key={team.team_name}>
             <div className={styles.teamInitials}>
-              <img
+              <Image
                 src={team.team_logo_url}
                 alt={team.team_name}
                 className={styles.logo}
@@ -135,7 +136,7 @@ export default function VoteSection() {
                   }
                   className={styles.voteInput}
                 />
-                <img
+                <Image
                   src="/images/marble-coin.png"
                   alt="Marble Coin"
                   className={styles.coin}
