@@ -7,6 +7,7 @@ import BettingFeature from "./components/betFeature/RulesAndStats";
 import Stats from "./components/stats/Stats";
 import ShadowWrapper from "./components/utils/shadow/shadowWrapper/ShadowWrapper";
 import AuthModal from "./components/utils/authModal/AuthModal";
+import Affiliate from "./components/affiliate/Affiliate";
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
 
       <ShadowWrapper />
       <AuthModal />
+      <Affiliate />
     </>
   );
 }

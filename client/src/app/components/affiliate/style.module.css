@@ -1,0 +1,17 @@
+.affiliate {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+
+  padding: 12px 24px;
+
+  color: white;
+
+  font-size: 2rem;
+  background-color: black;
+
+  border-radius: 6px;
+  border: 2px solid white;
+
+  cursor: pointer;
+}
