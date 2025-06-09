@@ -7,6 +7,7 @@ import { AppProvider } from "./context/AppContexty";
 import { createClient } from "./utils/supabase/server";
 import { UserType } from "./types/userTypes";
 import DailyRewardToast from "./components/dailyRewardToast/DayliRewardToast";
+import Script from "next/script";
 
 const audiowide = Audiowide({
   weight: "400",
@@ -95,6 +96,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4508659001414867"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body
         className={`${audiowide.variable} ${courierPrime.variable} antialiased layout`}
       >

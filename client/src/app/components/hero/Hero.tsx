@@ -22,13 +22,21 @@ Fast games, big moments, real rankings.`}
         </button>
       </div>
 
-      <video
+      <div className={styles.video}>
+        <iframe
+          style={{ width: "100%", height: "100%" }}
+          src="https://www.youtube.com/embed/e-jz2oUblxs"
+          title="YouTube video player"
+        ></iframe>
+      </div>
+
+      {/* <video
         className={styles.video}
         src="/video/background.mp4"
         muted
         autoPlay
         loop
-      />
+      /> */}
     </div>
   );
 }

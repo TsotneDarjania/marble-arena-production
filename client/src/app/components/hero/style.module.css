@@ -27,9 +27,12 @@
 
 .video {
   width: 600px;
+  height: 329px;
   max-width: 100%;
   margin-top: 10px;
   box-shadow: 15px 15px 0px 0px rgb(5, 33, 37);
+
+  position: relative;
 }
 
 .betButton {
@@ -75,7 +78,13 @@
   }
 
   .video {
-    width: 90%;
+    width: 300px;
+    height: 165px;
+    max-width: 100%;
+    margin-top: 10px;
+    box-shadow: 15px 15px 0px 0px rgb(5, 33, 37);
+
+    position: relative;
   }
 }
 
