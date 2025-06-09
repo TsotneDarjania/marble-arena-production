@@ -5,6 +5,7 @@ import Image from "next/image";
 import styles from "./style.module.css";
 import { useAppContext } from "@/app/context/AppContexty";
 import Link from "next/link";
+import Script from "next/script";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -144,6 +145,10 @@ export default function Header() {
           </ul>
         </nav>
       </div>
+      <Script
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4508659001414867"
+        crossOrigin="anonymous"
+      />
     </header>
   );
 }
