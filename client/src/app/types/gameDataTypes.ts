@@ -8,6 +8,7 @@ export type TeamDataType = {
     | "3-5-2"
     | "3-3-4"
     | "4-3-3"
+    | "3-4-3"
     | "5-4-1";
   defence_speed: number;
   defence_strategy: "wide-attack" | "wide-back" | "center-attack" | "normal";

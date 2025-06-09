@@ -41,6 +41,7 @@ export async function addTeamToDatabase(data: FormData) {
       | "3-5-2"
       | "3-3-4"
       | "4-3-3"
+      | "3-4-3"
       | "5-4-1",
     defence_strategy: data.get("defence_strategy") as
       | "normal"
