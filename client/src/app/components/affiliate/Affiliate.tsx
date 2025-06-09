@@ -10,7 +10,7 @@ export default function Affiliate() {
         window.open("https://stake.com/?c=VvBWG18G");
       }}
     >
-      <h2>More Games</h2>
+      <h2 className="title-font">More Games</h2>
     </div>
   );
 }

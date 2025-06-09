@@ -23,6 +23,24 @@ const courierPrime = Courier_Prime({
 export const metadata: Metadata = {
   title: "Marble Arena",
   description: "Football simulation game",
+  icons: {
+    icon: "/favicon.ico", // Add your favicon to /public
+  },
+  openGraph: {
+    title: "Marble Arena",
+    description: "Join the ultimate football simulation experience.",
+    url: "https://m-arena.com",
+    siteName: "Marble Arena",
+    images: [
+      {
+        url: "https://m-arena.com/brand-logo.png", // Add this image to /public
+        width: 1200,
+        height: 630,
+        alt: "Marble Arena OG Image",
+      },
+    ],
+    type: "website",
+  },
 };
 
 export default async function RootLayout({

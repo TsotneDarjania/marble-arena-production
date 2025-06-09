@@ -93,7 +93,7 @@ export default function AdminPage() {
 
   const { user } = useAppContext();
 
-  if (user?.username !== "Admin" || !user) {
+  if (user?.username !== "JohnGO" || !user) {
     window.location.href = "/";
     return null;
   }

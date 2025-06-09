@@ -5,13 +5,16 @@
 
   padding: 12px 24px;
 
-  color: white;
+  color: rgb(8, 14, 20);
 
   font-size: 2rem;
-  background-color: black;
+  background-color: rgb(245, 241, 22);
+
+  font-weight: bold;
 
   border-radius: 6px;
   border: 2px solid white;
 
   cursor: pointer;
+  z-index: 1;
 }

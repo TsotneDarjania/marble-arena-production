@@ -72,7 +72,7 @@ export default function Footer() {
       </div>
 
       <div className={styles.meta + " text-font"}>
-        <p>© 2025 Marble Arena. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Marble Arena. All rights reserved.</p>
       </div>
     </footer>
   );

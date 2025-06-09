@@ -148,7 +148,9 @@ export default function AuthModal() {
           )}
         </form>
 
-        <footer className={styles.footer}>© 2024 Marble Arena</footer>
+        <footer className={styles.footer}>
+          © {new Date().getFullYear()} Marble Arena
+        </footer>
       </div>
 
       {isInfoModalOpen && (
