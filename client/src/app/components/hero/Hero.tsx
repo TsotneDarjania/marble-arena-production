@@ -2,7 +2,7 @@
 
 import styles from "./style.module.css";
 
-export default function Hero() {
+export default function Hero({ embedLink }: { embedLink: string | null }) {
   return (
     <div className={styles.hero}>
       <div className={styles.heroText}>
@@ -23,20 +23,16 @@ Fast games, big moments, real rankings.`}
       </div>
 
       <div className={styles.video}>
-        <iframe
-          style={{ width: "100%", height: "100%" }}
-          src="https://www.youtube.com/embed/e-jz2oUblxs"
-          title="YouTube video player"
-        ></iframe>
+        {embedLink ? (
+          <iframe
+            style={{ width: "100%", height: "100%" }}
+            src={embedLink}
+            title="YouTube video player"
+          ></iframe>
+        ) : (
+          <p style={{ color: "white" }}>No video available</p>
+        )}
       </div>
-
-      {/* <video
-        className={styles.video}
-        src="/video/background.mp4"
-        muted
-        autoPlay
-        loop
-      /> */}
     </div>
   );
 }

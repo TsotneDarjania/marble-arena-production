@@ -8,11 +8,12 @@ import Stats from "./components/stats/Stats";
 import ShadowWrapper from "./components/utils/shadow/shadowWrapper/ShadowWrapper";
 import AuthModal from "./components/utils/authModal/AuthModal";
 import Affiliate from "./components/affiliate/Affiliate";
+import HeroWrapper from "./components/hero/HeroWrapper";
 
 export default function Home() {
   return (
     <>
-      <Hero />
+      <HeroWrapper />
       <TeamsExhibition />
       <Standings />
       <Leaderboard />

@@ -113,3 +113,23 @@
   color: #000;
   text-align: center;
 }
+
+.input {
+  border: 2px solid white;
+  width: 100%;
+  padding: 7px;
+
+  color: white;
+}
+
+.saveButton {
+  width: 15%;
+
+  border: 2px solid white;
+  background-color: black;
+  color: white;
+
+  font-size: 1.6rem;
+
+  cursor: pointer;
+}

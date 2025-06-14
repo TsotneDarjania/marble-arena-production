@@ -16,6 +16,7 @@ import { getCurrentLeagueWeek } from "@/app/utils/supabase/actions/getCurrentLea
 import { submitWeekResults } from "@/app/utils/supabase/actions/submitWeekResults";
 import { useAppContext } from "@/app/context/AppContexty";
 import Image from "next/image";
+import { saveHeroEmbedVideoLink } from "@/app/utils/supabase/actions/saveHeroVideo";
 
 type Fixture = {
   host?: {
@@ -57,6 +58,17 @@ export default function AdminPage() {
 
   const openModal = (modalName: AdminModal) => setActiveModal(modalName);
   const closeAllModals = () => setActiveModal(null);
+
+  const [videoUrl, setVideoUrl] = useState("");
+
+  const handleVideoSave = async () => {
+    const result = await saveHeroEmbedVideoLink(videoUrl);
+    if (result.success) {
+      alert("Video link saved successfully!");
+    } else {
+      alert("Error: " + result.message);
+    }
+  };
 
   const buttons = [
     { label: "Add Team", modal: "addTeam" },
@@ -234,6 +246,19 @@ export default function AdminPage() {
           Submit Results
         </button>
       )}
+
+      <div className="flex w-full">
+        <input
+          placeholder="Paste Embed Video Link for Hero Section"
+          className={styles.input}
+          type="text"
+          value={videoUrl}
+          onChange={(e) => setVideoUrl(e.target.value)}
+        />
+        <button onClick={handleVideoSave} className={styles.saveButton}>
+          Save
+        </button>
+      </div>
     </div>
   );
 }
