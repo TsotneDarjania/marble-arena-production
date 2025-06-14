@@ -7,7 +7,7 @@ import AuthModal from "@/app/components/utils/authModal/AuthModal";
 
 export default function League() {
   return (
-    <div>
+    <>
       <LeagueStandings />
       <Fixtures />
       {/* <MarbleLeagueWinners /> */}
@@ -15,6 +15,6 @@ export default function League() {
 
       <ShadowWrapper />
       <AuthModal />
-    </div>
+    </>
   );
 }

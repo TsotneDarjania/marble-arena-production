@@ -110,16 +110,25 @@ export default function VoteSection() {
         {teams.map((team) => (
           <div className={styles.teamItem} key={team.team_name}>
             <div className={styles.teamInitials}>
-              <Image
-                src={team.team_logo_url}
-                alt={team.team_name}
-                className={styles.logo}
-              />
+              <div className={styles.teamLogo}>
+                <Image
+                  src={team.team_logo_url}
+                  alt={team.team_name}
+                  className={styles.logo}
+                  fill
+                  style={{ objectFit: "contain" }}
+                />
+              </div>
+
               <span className={styles.teamName}>{team.team_name}</span>
             </div>
 
+            <div className={styles.voteCount}>
+              Total Coins: {team.voted_coins}
+            </div>
+
             <div className={styles.voteControls}>
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center flex-col md:flex-row">
                 <label
                   htmlFor={`input-${team.team_name}`}
                   className={styles.voteLabel}
@@ -136,11 +145,14 @@ export default function VoteSection() {
                   }
                   className={styles.voteInput}
                 />
-                <Image
-                  src="/images/marble-coin.png"
-                  alt="Marble Coin"
-                  className={styles.coin}
-                />
+                <div className={styles.coin}>
+                  <Image
+                    src="/images/marble-coin.png"
+                    alt="Marble Coin"
+                    fill
+                    style={{ objectFit: "contain" }}
+                  />
+                </div>
               </div>
 
               <button
@@ -150,10 +162,6 @@ export default function VoteSection() {
               >
                 {loadingTeamName === team.team_name ? "Voting..." : "VOTE"}
               </button>
-            </div>
-
-            <div className={styles.voteCount}>
-              Total Coins: {team.voted_coins}
             </div>
           </div>
         ))}
