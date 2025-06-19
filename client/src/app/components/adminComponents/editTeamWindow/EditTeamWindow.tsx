@@ -102,8 +102,8 @@ export default function EditTeamWindow() {
       defence_speed: finalValue,
       midfielder_speed: finalValue,
       pass_accuracy: finalValue,
-      pass_speed: finalValue,
-      shoot_accuracy: finalValue,
+      pass_speed: finalValue - 20,
+      shoot_accuracy: finalValue - 30,
     }));
   }
 
