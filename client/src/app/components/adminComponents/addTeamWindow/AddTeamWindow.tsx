@@ -155,7 +155,6 @@ export default function AddTeamWindow() {
           <select name="default_strategy" onChange={handleChange}>
             <option value="4-4-2">4-4-2</option>
             <option value="5-3-2">5-3-2</option>
-            <option value="3-4-4">3-4-4</option>
             <option value="3-5-2">3-5-2</option>
             <option value="3-3-4">3-3-4</option>
             <option value="4-3-3">4-3-3</option>
@@ -170,7 +169,6 @@ export default function AddTeamWindow() {
             <option value="normal">Normal</option>
             <option value="wide-attack">Wide Attack</option>
             <option value="wide-back">Wide Back</option>
-            <option value="center-attack">Center Attack</option>
           </select>
         </label>
 
@@ -180,6 +178,7 @@ export default function AddTeamWindow() {
             <option value="normal">Normal</option>
             <option value="wide-attack">Wide Attack</option>
             <option value="wide-back">Wide Back</option>
+            <option value="center-attack">Center Attack</option>
           </select>
         </label>
 

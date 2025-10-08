@@ -4,19 +4,18 @@ export type TeamDataType = {
   default_strategy:
     | "4-4-2"
     | "5-3-2"
-    | "3-4-4"
     | "3-5-2"
     | "3-3-4"
     | "4-3-3"
     | "3-4-3"
     | "5-4-1";
   defence_speed: number;
-  defence_strategy: "wide-attack" | "wide-back" | "center-attack" | "normal";
+  defence_strategy: "wide-attack" | "wide-back" | "normal";
   fault_possibility: number;
   goalkeeper_speed: number;
   id: number;
   midfielder_speed: number;
-  midfielder_strategy: "wide-attack" | "wide-back" | "normal";
+  midfielder_strategy: "wide-attack" | "wide-back" | "center-attack" | "normal";
   name: string;
   pass_accuracy: number;
   pass_speed: number;

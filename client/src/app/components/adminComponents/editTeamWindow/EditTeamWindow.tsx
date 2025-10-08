@@ -197,6 +197,8 @@ export default function EditTeamWindow() {
                   src={formData.team_logo_url}
                   alt="Team Logo"
                   style={{ maxWidth: "100px", marginTop: "10px" }}
+                  width={40}
+                  height={40}
                 />
               )}
             <input
@@ -275,7 +277,6 @@ export default function EditTeamWindow() {
             >
               <option value="4-4-2">4-4-2</option>
               <option value="5-3-2">5-3-2</option>
-              <option value="3-4-4">3-4-4</option>
               <option value="3-5-2">3-5-2</option>
               <option value="3-3-4">3-3-4</option>
               <option value="4-3-3">4-3-3</option>
@@ -293,7 +294,6 @@ export default function EditTeamWindow() {
               <option value="normal">Normal</option>
               <option value="wide-attack">Wide Attack</option>
               <option value="wide-back">Wide Back</option>
-              <option value="center-attack">Center Attack</option>
             </select>
           </label>
           <label>
@@ -306,6 +306,7 @@ export default function EditTeamWindow() {
               <option value="normal">Normal</option>
               <option value="wide-attack">Wide Attack</option>
               <option value="wide-back">Wide Back</option>
+              <option value="center-attack">Center Attack</option>
             </select>
           </label>
           <label>
