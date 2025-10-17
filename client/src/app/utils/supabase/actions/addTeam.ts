@@ -37,7 +37,6 @@ export async function addTeamToDatabase(data: FormData) {
     default_strategy: data.get("default_strategy") as
       | "4-4-2"
       | "5-3-2"
-      | "3-4-4"
       | "3-5-2"
       | "3-3-4"
       | "4-3-3"
@@ -46,11 +45,11 @@ export async function addTeamToDatabase(data: FormData) {
     defence_strategy: data.get("defence_strategy") as
       | "normal"
       | "wide-back"
-      | "wide-attack"
-      | "center-attack",
+      | "wide-attack",
     midfielder_strategy: data.get("midfielder_strategy") as
       | "normal"
       | "wide-back"
+      | "center-attack"
       | "wide-attack",
     goalkeeper_speed: Number(data.get("goalkeeper_speed")),
     defence_speed: Number(data.get("defence_speed")),
