@@ -64,6 +64,16 @@ export default function Header() {
           className={`${styles.nav} ${isMobileMenuOpen ? styles.navOpen : ""}`}
         >
           <ul>
+            <Link href="/simulator" prefetch={true} onClick={handleNavItemClick}>
+              <li
+                className={`${styles.menuItem} ${
+                  scrolled ? styles.scrolledMenuItem : ""
+                } title-font`}
+              >
+                <p>SIMULATOR</p>
+              </li>
+            </Link>
+
             <Link href="/league" prefetch={true} onClick={handleNavItemClick}>
               <li
                 className={`${styles.menuItem} ${

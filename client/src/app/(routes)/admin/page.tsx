@@ -205,7 +205,7 @@ export default function AdminPage() {
                     className={styles.playButton}
                     onClick={() =>
                       router.push(
-                        `/game?host=${fixture.host!.id}&guest=${
+                        `/simulator?host=${fixture.host!.id}&guest=${
                           fixture.guest!.id
                         }`
                       )
