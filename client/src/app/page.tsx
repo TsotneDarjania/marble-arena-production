@@ -10,7 +10,7 @@ import AuthModal from "./components/utils/authModal/AuthModal";
 import HeroWrapper from "./components/hero/HeroWrapper";
 import { UserType } from "./types/userTypes";
 
-export default function Home({user} : {user: UserType}) {
+export default function Home() {
   return (
     <>
       <HeroWrapper />
