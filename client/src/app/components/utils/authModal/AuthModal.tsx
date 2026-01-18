@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-// Define schemas
+// Schemas
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(3, "Password must be at least 3 characters"),
@@ -19,10 +19,8 @@ const registerSchema = loginSchema.extend({
   username: z.string().min(1, "Username is required"),
 });
 
-// Infer types
-type LoginSchema = z.infer<typeof loginSchema>;
-type RegisterSchema = z.infer<typeof registerSchema>;
-type FormSchema = LoginSchema | RegisterSchema;
+type LoginForm = z.infer<typeof loginSchema>;
+type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function AuthModal() {
   const { isAuthModalOpen } = useAppContext();
@@ -32,52 +30,58 @@ export default function AuthModal() {
   const [clickSubmitButton, setClickSubmitButton] = useState(false);
   const [warningText, setWarningText] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormSchema>({
-    resolver: zodResolver(isLoginState ? loginSchema : registerSchema),
+  const loginForm = useForm<LoginForm>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const registerForm = useForm<RegisterForm>({
+    resolver: zodResolver(registerSchema),
   });
 
   useEffect(() => {
     setisLoginState(true);
     setClickSubmitButton(false);
-  }, [isAuthModalOpen]);
+    loginForm.reset();
+    registerForm.reset();
+  }, [isAuthModalOpen]); // intentionally not adding form deps
 
   if (!isAuthModalOpen) return null;
 
-  const onSubmit = async (data: FormSchema) => {
+  const onSubmitLogin = async (data: LoginForm) => {
     setClickSubmitButton(true);
 
     const formData = new FormData();
     formData.append("email", data.email);
     formData.append("password", data.password);
 
-    if (!isLoginState && "username" in data) {
-      formData.append("username", data.username);
-    }
+    const result = await login(formData);
 
-    if (isLoginState) {
-      const result = await login(formData);
-
-      if (result.success) {
-        window.location.href = "/";
-      } else {
-        setWarningText(result.message || "Something went wrong, try again.");
-        setIsInfoModalOpen(true);
-      }
+    if (result.success) {
+      window.location.href = "/";
     } else {
-      const result = await signup(formData);
+      setWarningText(result.message || "Something went wrong, try again.");
+      setIsInfoModalOpen(true);
       setClickSubmitButton(false);
+    }
+  };
 
-      if (result.success) {
-        setisLoginState(true);
-        window.location.reload();
-      } else {
-        setWarningText(result.message || "Something went wrong, try again.");
-        setIsInfoModalOpen(true);
-      }
+  const onSubmitRegister = async (data: RegisterForm) => {
+    setClickSubmitButton(true);
+
+    const formData = new FormData();
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("username", data.username);
+
+    const result = await signup(formData);
+    setClickSubmitButton(false);
+
+    if (result.success) {
+      setisLoginState(true);
+      window.location.reload();
+    } else {
+      setWarningText(result.message || "Something went wrong, try again.");
+      setIsInfoModalOpen(true);
     }
   };
 
@@ -87,66 +91,103 @@ export default function AuthModal() {
         {clickSubmitButton && <div className={styles.block}></div>}
         <h2 className={styles.title + " title-font"}>LOGIN / REGISTER</h2>
 
-        <form
-          className={styles.form + " text-font"}
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          {!isLoginState && (
-            <>
-              <label>Username</label>
-              <input
-                {...register("username")}
-                maxLength={20}
-                type="text"
-                placeholder="Enter your username"
-              />
-              {/* Access username error only if it's register mode */}
-              {!isLoginState && "username" in errors && (
-                <p className={styles.error}>{errors.username?.message}</p>
-              )}
-            </>
-          )}
+        {isLoginState ? (
+          // ✅ LOGIN FORM
+          <form
+            className={styles.form + " text-font"}
+            onSubmit={loginForm.handleSubmit(onSubmitLogin)}
+          >
+            <label>Email address</label>
+            <input
+              {...loginForm.register("email")}
+              maxLength={50}
+              type="email"
+              placeholder="Enter your email"
+            />
+            {loginForm.formState.errors.email && (
+              <p className={styles.error}>
+                {loginForm.formState.errors.email.message}
+              </p>
+            )}
 
-          <label>Email address</label>
-          <input
-            {...register("email")}
-            maxLength={50}
-            type="email"
-            placeholder="Enter your email"
-          />
-          {errors.email && (
-            <p className={styles.error}>{errors.email.message}</p>
-          )}
+            <label>Password</label>
+            <input
+              {...loginForm.register("password")}
+              maxLength={30}
+              type="password"
+              placeholder="Enter your password"
+            />
+            {loginForm.formState.errors.password && (
+              <p className={styles.error}>
+                {loginForm.formState.errors.password.message}
+              </p>
+            )}
 
-          <label>Password</label>
-          <input
-            {...register("password")}
-            maxLength={30}
-            type="password"
-            placeholder="Enter your password"
-          />
-          {errors.password && (
-            <p className={styles.error}>{errors.password.message}</p>
-          )}
+            <div className="w-[100%]">
+              <button type="submit" className={styles.loginBtn}>
+                LOGIN
+              </button>
+            </div>
 
-          <div className="w-[100%]">
-            <button
-              type="submit"
-              className={isLoginState ? styles.loginBtn : styles.registerBtn}
-            >
-              {isLoginState ? "LOGIN" : "REGISTER"}
-            </button>
-          </div>
-
-          {isLoginState && (
             <p
               onClick={() => setisLoginState(false)}
               className={styles.registerLink}
             >
               REGISTER
             </p>
-          )}
-        </form>
+          </form>
+        ) : (
+          // ✅ REGISTER FORM
+          <form
+            className={styles.form + " text-font"}
+            onSubmit={registerForm.handleSubmit(onSubmitRegister)}
+          >
+            <label>Username</label>
+            <input
+              {...registerForm.register("username")}
+              maxLength={20}
+              type="text"
+              placeholder="Enter your username"
+            />
+            {registerForm.formState.errors.username && (
+              <p className={styles.error}>
+                {registerForm.formState.errors.username.message}
+              </p>
+            )}
+
+            <label>Email address</label>
+            <input
+              {...registerForm.register("email")}
+              maxLength={50}
+              type="email"
+              placeholder="Enter your email"
+            />
+            {registerForm.formState.errors.email && (
+              <p className={styles.error}>
+                {registerForm.formState.errors.email.message}
+              </p>
+            )}
+
+            <label>Password</label>
+            <input
+              {...registerForm.register("password")}
+              maxLength={30}
+              type="password"
+              placeholder="Enter your password"
+            />
+            {registerForm.formState.errors.password && (
+              <p className={styles.error}>
+                {registerForm.formState.errors.password.message}
+              </p>
+            )}
+
+            <div className="w-[100%]">
+              <button type="submit" className={styles.registerBtn}>
+                REGISTER
+              </button>
+            </div>
+          </form>
+        )}
 
         <footer className={styles.footer}>
           © {new Date().getFullYear()} Marble Arena
