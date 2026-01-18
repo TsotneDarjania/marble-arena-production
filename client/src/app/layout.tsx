@@ -51,7 +51,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let userData = await getUserData();
+  const userData = await getUserData();
 
   // if (!authError && user) {
   // const { data, error: userError } = await supabase
