@@ -66,6 +66,7 @@ export default function AddTeamWindow() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    console.log(formData)
 
     const result = await addTeamToDatabase(formData);
 

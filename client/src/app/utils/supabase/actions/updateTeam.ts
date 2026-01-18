@@ -31,6 +31,7 @@ export async function updateTeamInDatabase(data: FormData) {
   }
 
   const updatePayload: Partial<TeamDataType> = {
+    is_national_team: data.get("is_national_team") as string,
     name: data.get("name") as string,
     tablo_name: data.get("tablo_name") as string,
     team_logo_url: imageUrl,

@@ -8,14 +8,15 @@ import Stats from "./components/stats/Stats";
 import ShadowWrapper from "./components/utils/shadow/shadowWrapper/ShadowWrapper";
 import AuthModal from "./components/utils/authModal/AuthModal";
 import HeroWrapper from "./components/hero/HeroWrapper";
+import { UserType } from "./types/userTypes";
 
-export default function Home() {
+export default function Home({user} : {user: UserType}) {
   return (
     <>
       <HeroWrapper />
       <TeamsExhibition />
       <Standings />
-      <Leaderboard />
+      <Leaderboard/>
       <Features />
       <BettingFeature />
       <Stats />

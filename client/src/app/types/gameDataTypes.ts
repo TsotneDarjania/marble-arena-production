@@ -25,4 +25,5 @@ export type TeamDataType = {
   tablo_name: string;
   team_logo_url: string;
   fifa_raiting: number;
+  is_national_team: string
 };

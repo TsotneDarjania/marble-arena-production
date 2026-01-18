@@ -6,8 +6,10 @@ import Footer from "./components/footer/Footer";
 import { AppProvider } from "./context/AppContexty";
 import { createClient } from "./utils/supabase/server";
 import { UserType } from "./types/userTypes";
-import DailyRewardToast from "./components/dailyRewardToast/DayliRewardToast";
+import { cache } from "react";
+import { getUserData } from "./utils/supabase/actions/getUserData";
 import Script from "next/script";
+import AnalyticsTracker from "./components/analyticsTracker/AnalyticsTracker";
 
 const audiowide = Audiowide({
   weight: "400",
@@ -49,67 +51,70 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
+  let userData = await getUserData();
 
-  let userData: UserType = null;
+  // if (!authError && user) {
+  // const { data, error: userError } = await supabase
+  //   .from("Users")
+  //   .select("balance, profile_image_url, last_reward_date")
+  //   .eq("id", user.id)
+  //   .single();
 
-  if (!authError && user) {
-    const { data, error: userError } = await supabase
-      .from("Users")
-      .select("balance, profile_image_url, last_reward_date")
-      .eq("id", user.id)
-      .single();
+  // if (!userError && data) {
+  // const today = new Date().toISOString().slice(0, 10);
+  // const needsReward = data.last_reward_date !== today;
 
-    if (!userError && data) {
-      const today = new Date().toISOString().slice(0, 10);
-      const needsReward = data.last_reward_date !== today;
+  // if (needsReward) {
+  //   const { error: updateError } = await supabase
+  //     .from("Users")
+  //     .update({
+  //       balance: data.balance + 1,
+  //       last_reward_date: today,
+  //     })
+  //     .eq("id", user.id);
 
-      if (needsReward) {
-        const { error: updateError } = await supabase
-          .from("Users")
-          .update({
-            balance: data.balance + 1,
-            last_reward_date: today,
-          })
-          .eq("id", user.id);
+  //   if (!updateError) {
+  //     data.balance += 1;
+  //     await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reward`, {
+  //       method: "POST",
+  //     });
+  //   }
+  // }
 
-        if (!updateError) {
-          data.balance += 1;
-          await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reward`, {
-            method: "POST",
-          });
-        }
-      }
-
-      userData = {
-        username: user.user_metadata.displayName,
-        coins: data.balance,
-        profileImage: data.profile_image_url,
-        id: user.id,
-      };
-    }
-  }
+  // userData = {
+  //   username: user.user_metadata.displayName,
+  //   coins: data.balance,
+  //   profileImage: data.profile_image_url,
+  //   id: user.id,
+  // };
+  // }
+  // }
 
   return (
     <html lang="en">
       <head>
         <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4508659001414867"
-          crossOrigin="anonymous"
+          src="https://www.googletagmanager.com/gtag/js?id=G-CBPWBNP98C"
+          strategy="afterInteractive"
         />
+        <Script id="ga-init" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-CBPWBNP98C', { page_path: window.location.pathname });
+        `}
+        </Script>
       </head>
+
       <body
         className={`${audiowide.variable} ${courierPrime.variable} antialiased layout`}
       >
+        <AnalyticsTracker />
         <AppProvider user={userData}>
           <Header />
           {children}
           <Footer />
-          <DailyRewardToast />
         </AppProvider>
       </body>
     </html>

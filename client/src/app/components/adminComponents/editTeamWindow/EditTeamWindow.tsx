@@ -24,6 +24,7 @@ export default function EditTeamWindow() {
     (async () => {
       const result = await getTeamsFromDatabase();
       if (result.success) {
+        console.log(result.data)
         setTeams(result.data);
       } else {
         alert("Failed to load teams: " + result.message);
@@ -114,6 +115,7 @@ export default function EditTeamWindow() {
     const form = new FormData();
     form.append("id", String(selectedTeamId));
     form.append("name", formData.name ?? "");
+    form.append("is_national_team", formData.is_national_team ?? "");
     form.append("tablo_name", formData.tablo_name ?? "");
     form.append("primary_color", formData.primary_color ?? "#000000");
     form.append("secondary_color", formData.secondary_color ?? "#ffffff");
